@@ -358,6 +358,7 @@ const PricingPage = () => {
         if (kErr || !kData?.checkout_url) {
           throw new Error(kErr?.message || kData?.error || "Checkout failed");
         }
+        markCheckoutOpened(interval);
         window.location.href = kData.checkout_url;
         return;
       }
