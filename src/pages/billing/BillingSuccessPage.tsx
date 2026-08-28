@@ -4,6 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { m as motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import SecondMonthOfferCard from "@/components/billing/SecondMonthOfferCard";
+import { clearAbandonedCheckout } from "@/lib/pricingOffers";
 
 const mobileFont =
   "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif";
