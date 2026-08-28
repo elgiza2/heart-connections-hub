@@ -38,8 +38,28 @@
     <!-- LCP hint: preconnect + prefetch the hero video CDN so the landing hero paints faster. -->
     <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" crossorigin />
     <link rel="dns-prefetch" href="https://d8j0ntlcm91z4.cloudfront.net" />
-    <!-- Telegram Mini App SDK — required for initData when opened inside Telegram. -->
-    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Telegram Mini App SDK — only needed when the app is actually opened
+         inside Telegram. Loading it unconditionally cost every web visitor an
+         extra cross-origin request on the critical path. -->
+    <script>
+      (function () {
+        try {
+          var inTelegram =
+            /[?#&]tgWebApp/.test(location.href) ||
+            "TelegramWebviewProxy" in window ||
+            /Telegram/i.test(navigator.userAgent);
+          if (!inTelegram) return;
+          // document.write keeps the SDK parser-blocking *inside Telegram only*,
+          // so window.Telegram.WebApp is guaranteed to exist before main.tsx
+          // reads initData. Web visitors never pay for this request.
+          document.write(
+            '<script src="https://telegram.org/js/telegram-web-app.js"><\/script>'
+          );
+
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- LCP-critical fonts only (Space Grotesk + Inter). Trimmed weights + display=swap for instant first paint with system-font fallback. -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
@@ -153,18 +173,49 @@
     </svg>
     <div id="root"></div>
 
-    <!-- Speculation Rules API (Chromium 111+): prerender same-origin links on
-         moderate hover intent. Falls back silently on Safari/Firefox. -->
-    <script type="speculationrules">
-      {
-        "prerender": [
-          { "source": "document", "where": { "and": [ { "href_matches": "/*" }, { "not": { "href_matches": "/api/*" } }, { "not": { "href_matches": "/auth/*" } } ] }, "eagerness": "moderate" }
-        ],
-        "prefetch": [
-          { "source": "document", "where": { "href_matches": "/*" }, "eagerness": "conservative" }
-        ]
-      }
+    <!-- Speculation Rules API (Chromium 111+): registered from JS so weak
+         devices, Data Saver and slow networks are skipped entirely — a full
+         prerender is a second page render and it used to run on every hover,
+         which slowed the *current* page down on low-end hardware. Injected
+         after load so it never competes with the first paint. -->
+    <script>
+      (function () {
+        try {
+          if (!HTMLScriptElement.supports?.("speculationrules")) return;
+          var nav = navigator;
+          var c = nav.connection || {};
+          var slow = c.saveData === true || /(^|-)(2g|slow-2g)$/.test(c.effectiveType || "");
+          var weak = (nav.hardwareConcurrency || 8) <= 4 || (nav.deviceMemory || 8) <= 4;
+          if (slow || weak) return;
+          var add = function () {
+            var s = document.createElement("script");
+            s.type = "speculationrules";
+            s.textContent = JSON.stringify({
+              prerender: [
+                {
+                  source: "document",
+                  where: {
+                    and: [
+                      { href_matches: "/*" },
+                      { not: { href_matches: "/api/*" } },
+                      { not: { href_matches: "/auth/*" } },
+                    ],
+                  },
+                  eagerness: "moderate",
+                },
+              ],
+              prefetch: [
+                { source: "document", where: { href_matches: "/*" }, eagerness: "conservative" },
+              ],
+            });
+            document.body.appendChild(s);
+          };
+          if (document.readyState === "complete") setTimeout(add, 1200);
+          else addEventListener("load", function () { setTimeout(add, 1200); });
+        } catch (e) {}
+      })();
     </script>
+
     <script type="module" src="/src/main.tsx"></script>
 
 
