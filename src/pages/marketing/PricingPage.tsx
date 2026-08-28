@@ -775,18 +775,8 @@ const PricingPage = () => {
         >
           <div className="mx-auto mb-8 flex h-[170px] w-full max-w-[520px] items-center justify-center sm:h-[200px]">
             <PlanCard
-              plan="starter"
-              className="-mr-6 h-[104px] w-[152px] shrink-0 sm:h-[124px] sm:w-[182px]"
-              style={{ transform: "rotate(-12deg) translateY(4px)" }}
-            />
-            <PlanCard
               plan="pro"
               className="z-10 h-[120px] w-[176px] shrink-0 sm:h-[142px] sm:w-[208px]"
-            />
-            <PlanCard
-              plan="elite"
-              className="-ml-6 h-[104px] w-[152px] shrink-0 sm:h-[124px] sm:w-[182px]"
-              style={{ transform: "rotate(12deg) translateY(4px)" }}
             />
           </div>
 
@@ -794,7 +784,7 @@ const PricingPage = () => {
             className="font-garamond text-foreground"
             style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1.1 }}
           >
-            The Plans
+            Megsy Pro
           </h2>
           <p
             className="mt-3 text-foreground/85 text-xs sm:text-sm uppercase font-light"
@@ -848,8 +838,8 @@ const PricingPage = () => {
         </motion.div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {PLANS.map((p, i) => {
+        <div className="mx-auto grid max-w-xl grid-cols-1 gap-6 items-stretch">
+          {PLANS.filter((p) => p.tier === "pro").map((p, i) => {
             // Single source of truth: intro price monthly, 2-months-free yearly.
             const {
               price,
@@ -1034,58 +1024,7 @@ const PricingPage = () => {
             );
           })}
 
-          {/* Price anchor — Max Yearly makes the monthly plans read as cheap. */}
-          {(() => {
-            const max = getPlan("elite");
-            if (!max) return null;
-            const reference = max.monthlyPrice * 12;
-            const perMonth = (max.yearlyPrice / 12).toFixed(0);
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="relative flex flex-col rounded-3xl border border-foreground/15 bg-foreground/[0.03] p-7 backdrop-blur-md"
-              >
-                <span className="inline-flex w-fit items-center rounded-full border border-foreground/25 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/80">
-                  Best value
-                </span>
-                <h3 className="mt-4 font-display text-2xl font-bold text-foreground">
-                  Max · Yearly
-                </h3>
-                <p className="mt-1 text-sm text-foreground/60">
-                  The full Megsy stack, locked for 12 months.
-                </p>
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="font-display text-5xl font-black text-foreground">
-                    ${max.yearlyPrice}
-                  </span>
-                  <span className="pb-2 text-sm text-foreground/55 line-through">${reference}</span>
-                </div>
-                <p className="mt-2 text-sm text-foreground/70">
-                  ≈ ${perMonth}/month · {YEARLY_FREE_MONTHS} months free · save $
-                  {reference - max.yearlyPrice}
-                </p>
-                <ul className="mt-5 space-y-2 text-[13.5px] text-foreground/80">
-                  {PLAN_HIGHLIGHTS.max.slice(0, 4).map((f) => (
-                    <li key={f} className="flex gap-2">
-                      <Check className="mt-[3px] h-3.5 w-3.5 shrink-0" strokeWidth={2} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  type="button"
-                  onClick={() => handleSubscribe("elite", { interval: "yearly" })}
-                  className="mt-auto w-full rounded-2xl border border-foreground/25 bg-foreground/10 px-5 py-3.5 pt-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/20"
-                  style={{ marginTop: "1.5rem" }}
-                >
-                  Get Max Yearly
-                </button>
-              </motion.div>
-            );
-          })()}
+          {/* Single-plan lineup — only Megsy Pro is offered. */}
         </div>
 
 

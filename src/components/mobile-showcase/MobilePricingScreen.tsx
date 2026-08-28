@@ -1,21 +1,21 @@
-/** @doc Mobile /pricing — minimal, uncluttered upgrade screen.
- *  Sidebar button · plan switch · short benefit list · two billing rows · CTA.
- *  Everything fits 100dvh, calm staggered fade-in animation, no icon clutter.
+/** @doc Mobile /pricing — Manus-style minimal upgrade sheet.
+ *  Single plan (Megsy Pro): sparkle mark · serif title · white feature card
+ *  with icon rows · two billing option cards · fine print · CTA · legal links.
  */
 import { useEffect, useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import {
+  Sparkles,
+  MonitorSmartphone,
+  Timer,
+  Bot,
+  Search,
+  Infinity as InfinityIcon,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
-import {
-  PLAN_HIGHLIGHTS,
-  getDisplayPrice,
-  getPlan,
-  type PlanTier,
-} from "@/data/pricingData";
-import PlanCard from "@/pages/billing/referrals/PlanCard";
-
+import { getDisplayPrice, getPlan, type PlanTier } from "@/data/pricingData";
 function useIsLightTheme() {
   const [light, setLight] = useState(
     typeof document !== "undefined" &&
@@ -50,66 +50,117 @@ export default function MobilePricingScreen({
   const lang = useUserLang();
   const isAr = lang === "ar";
   const isLight = useIsLightTheme();
-  const [plan, setPlan] = useState<"pro" | "max">("pro");
+  const isLoading = loadingTier === "pro";
 
-  const t = useMemo(
+  const features = useMemo(
     () =>
       isAr
-        ? { pro: "Pro", max: "Max", monthly: "Monthly", yearly: "Yearly", month: "month", year: "year" }
-        : { pro: "Pro", max: "Max", monthly: "Monthly", yearly: "Yearly", month: "mo", year: "yr" },
+        ? [
+            { icon: Sparkles, text: "240 رصيد Megsy (MC) شهرياً" },
+            { icon: MonitorSmartphone, text: "كمبيوتر سحابي — متصفح وسطح مكتب حقيقي يعمل لأجلك" },
+            { icon: Timer, text: "مهام طويلة حتى 4 ساعات، تكمل حتى وأنت offline" },
+            { icon: Bot, text: "3 وكلاء يعملون في الخلفية بالتوازي" },
+            { icon: Search, text: "بحث عميق بتقارير موثّقة بالمصادر" },
+            { icon: InfinityIcon, text: "دردشة وتوليد صور بلا حدود" },
+          ]
+        : [
+            { icon: Sparkles, text: "240 Megsy Credits (MC) every month" },
+            { icon: MonitorSmartphone, text: "Cloud Computer — a real browser & desktop working for you" },
+            { icon: Timer, text: "Long-running tasks up to 4 hours, even while offline" },
+            { icon: Bot, text: "3 background agents working in parallel" },
+            { icon: Search, text: "Deep Research with citation-backed reports" },
+            { icon: InfinityIcon, text: "Unlimited chat & image generation" },
+          ],
     [isAr],
   );
 
-  const activeTier: PlanTier = plan === "pro" ? "pro" : "elite";
+  const t = isAr
+    ? {
+        title: "قم بالترقية إلى Megsy Pro",
+        monthly: "شهرياً",
+        yearly: "سنوياً",
+        introBadge: "خصم 65% على الشهر الأول",
+        yearlyBadge: "4 أشهر مجاناً",
+        perMonth: "/شهر",
+        perYear: "/سنة",
+        fine: "$7.00 للشهر الأول، ثم $20.00/شهر. يمكنك الإلغاء في أي وقت.",
+        cta: "قم بالترقية الآن",
+        terms: "الشروط",
+        privacy: "الخصوصية",
+        restore: "استعادة",
+      }
+    : {
+        title: "Upgrade to Megsy Pro",
+        monthly: "Monthly",
+        yearly: "Yearly",
+        introBadge: "65% off the first month",
+        yearlyBadge: "4 months free",
+        perMonth: "/mo",
+        perYear: "/yr",
+        fine: "$7.00 for the first month, then $20.00/month. Cancel anytime.",
+        cta: "Upgrade now",
+        terms: "Terms",
+        privacy: "Privacy",
+        restore: "Restore",
+      };
 
-  // Same source of truth as the desktop /pricing page.
-  const features = useMemo(() => PLAN_HIGHLIGHTS[plan], [plan]);
-
-  const prices = useMemo(() => {
-    const config = getPlan(activeTier)!;
-    const monthly = getDisplayPrice(config, false);
-    const yearly = getDisplayPrice(config, true);
-    return {
-      monthly: { price: String(monthly.price), strike: String(monthly.strike) },
-      yearly: { price: String(yearly.price), strike: String(yearly.strike) },
-    };
-  }, [activeTier]);
-  const isLoading = loadingTier === activeTier;
+  const pro = getPlan("pro")!;
+  const monthly = getDisplayPrice(pro, false);
+  const yearly = getDisplayPrice(pro, true);
 
   const c = isLight
     ? {
-        bg: "#ffffff",
         text: "#0a0a0a",
         muted: "#6b7280",
-        faint: "#6b7280",
-        line: "rgba(0,0,0,0.10)",
-        card: "rgba(0,0,0,0.035)",
-        switchBg: "rgba(0,0,0,0.06)",
-        switchOn: "#0e0e0e",
-        switchOnText: "#ffffff",
+        faint: "#9ca3af",
+        card: "#ffffff",
+        cardBorder: "rgba(0,0,0,0.08)",
+        cardShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08)",
         selBorder: "#0a0a0a",
-        ctaBg: "#0e0e0e",
-        ctaText: "#ffffff",
+        selBg: "rgba(0,0,0,0.025)",
+        unselBorder: "rgba(0,0,0,0.10)",
+        badgeBg: "#e8f1ff",
+        badgeText: "#1d4ed8",
+        icon: "#3f3f46",
       }
     : {
-        bg: "hsl(var(--background))",
         text: "#f5f5f5",
         muted: "#a3a3a3",
-        faint: "#9a9a9a",
-        line: "rgba(255,255,255,0.10)",
-        card: "rgba(255,255,255,0.055)",
-        switchBg: "rgba(255,255,255,0.08)",
-        switchOn: "#f5f5f5",
-        switchOnText: "#1a1a1a",
+        faint: "#737373",
+        card: "rgba(255,255,255,0.05)",
+        cardBorder: "rgba(255,255,255,0.10)",
+        cardShadow: "0 1px 2px rgba(0,0,0,0.25), 0 8px 24px -12px rgba(0,0,0,0.4)",
         selBorder: "#f5f5f5",
-        ctaBg: "#f5f5f5",
-        ctaText: "#1a1a1a",
+        selBg: "rgba(255,255,255,0.06)",
+        unselBorder: "rgba(255,255,255,0.14)",
+        badgeBg: "rgba(96,165,250,0.16)",
+        badgeText: "#93c5fd",
+        icon: "#d4d4d8",
       };
+
+  const options = [
+    {
+      yearly: false,
+      label: t.monthly,
+      badge: t.introBadge,
+      price: monthly.price,
+      strike: monthly.strike,
+      unit: t.perMonth,
+    },
+    {
+      yearly: true,
+      label: t.yearly,
+      badge: t.yearlyBadge,
+      price: yearly.price,
+      strike: yearly.strike,
+      unit: t.perYear,
+    },
+  ] as const;
 
   return (
     <div
-      dir={"ltr"}
-      className="pricing-sunset-bg relative flex h-[100dvh] w-full flex-col overflow-y-auto"
+      dir={isAr ? "rtl" : "ltr"}
+      className="relative flex h-[100dvh] w-full flex-col overflow-y-auto bg-background"
       style={{
         color: c.text,
         fontFamily: 'Inter, -apple-system, "SF Pro Text", system-ui, sans-serif',
@@ -122,7 +173,10 @@ export default function MobilePricingScreen({
       `}</style>
 
       {/* Header */}
-      <header className="relative shrink-0 px-4" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 2px)" }}>
+      <header
+        className="relative shrink-0 px-4"
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 2px)" }}
+      >
         <MobileSidebarButton
           onClick={() => onMenuClick?.()}
           ariaLabel="Menu"
@@ -130,170 +184,141 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="flex flex-1 flex-col justify-start gap-3 px-5 pb-2 pt-0">
-        {/* Plan card fan */}
-        <div className="mps-rise mx-auto flex h-[132px] w-full max-w-[420px] items-center justify-center" style={{ animationDelay: "20ms" }}>
-          <PlanCard
-            plan="starter"
-            className="h-[110px] w-[150px] shrink-0 -mr-8"
-            style={{ transform: "rotate(-12deg) translateY(4px)" }}
-          />
-          <PlanCard
-            plan="pro"
-            className="z-10 h-[128px] w-[175px] shrink-0"
-          />
-          <PlanCard
-            plan="elite"
-            className="h-[110px] w-[150px] shrink-0 -ml-8"
-            style={{ transform: "rotate(12deg) translateY(4px)" }}
-          />
+      <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col px-5">
+        {/* Sparkle mark */}
+        <div className="mps-rise mt-6 flex justify-center" style={{ animationDelay: "10ms" }}>
+          <Sparkles className="h-8 w-8" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
         </div>
 
-        {/* Title + plan switch */}
-        <div className="mps-rise" style={{ animationDelay: "40ms" }}>
-          <h1
-            className="text-[26px] font-normal leading-[1.15] tracking-[-0.02em]"
-            style={{ fontFamily: '"Instrument Serif", Georgia, serif' }}
-          >
-            {`Upgrade to Megsy ${plan === "pro" ? t.pro : t.max}`}
-          </h1>
-          <p className="mt-1.5 text-[13.5px]" style={{ color: c.muted }}>
-            {"Cancel anytime."}
-          </p>
+        {/* Title */}
+        <h1
+          className="mps-rise mt-5 text-center text-[28px] font-normal leading-[1.2] tracking-[-0.01em]"
+          style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
+        >
+          {t.title}
+        </h1>
 
-          <div className="mt-4 inline-flex rounded-full p-[3px]" style={{ background: c.switchBg }}>
-            {(["pro", "max"] as const).map((p) => (
-              <button
-                key={p}
-                type="button"
-                onClick={() => setPlan(p)}
-                className="h-8 min-w-[70px] rounded-full px-4 text-[13px] font-medium transition-colors duration-200"
-                style={{
-                  background: plan === p ? c.switchOn : "transparent",
-                  color: plan === p ? c.switchOnText : c.text,
-                }}
-              >
-                {p === "pro" ? t.pro : t.max}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Benefits — show ~3 lines, scroll the rest */}
-        <div className="relative shrink-0">
-          <ul
-            key={plan}
-            className="custom-pricing-scrollbar flex flex-col gap-3.5 overflow-y-auto pr-1"
-            style={{ maxHeight: "168px" }}
-          >
-            {features.map((f, i) => (
-              <li
-                key={f}
-                className="mps-rise flex items-start gap-3 text-[14.5px] leading-snug"
-                style={{ animationDelay: `${100 + i * 55}ms` }}
-              >
-                <Check className="mt-[2px] h-[15px] w-[15px] shrink-0" strokeWidth={2} style={{ color: c.text }} />
-                <span style={{ color: c.text }}>{f}</span>
+        {/* Feature card */}
+        <div
+          className="mps-rise mt-6 rounded-3xl px-6 py-6"
+          style={{
+            animationDelay: "120ms",
+            background: c.card,
+            border: `1px solid ${c.cardBorder}`,
+            boxShadow: c.cardShadow,
+          }}
+        >
+          <ul className="flex flex-col gap-5">
+            {features.map(({ icon: Icon, text }, i) => (
+              <li key={text} className="flex items-center gap-4">
+                <Icon className="h-[20px] w-[20px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
+                <span className="text-[14.5px] leading-snug" style={{ color: c.text }}>
+                  {text}
+                </span>
               </li>
             ))}
           </ul>
-          {features.length > 3 && (
-            <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-8"
-              style={{ background: `linear-gradient(to top, ${c.bg}, transparent)` }}
-            />
-          )}
         </div>
-      </div>
 
-      {/* Billing rows */}
-      <div className="mps-rise shrink-0 px-5" style={{ animationDelay: "380ms" }}>
-        <div className="flex flex-col gap-2.5">
-          {([
-            { yearly: false, label: t.monthly, block: prices.monthly, unit: t.month },
-            { yearly: true, label: t.yearly, block: prices.yearly, unit: t.year },
-          ] as const).map((opt) => {
+        {/* Billing options */}
+        <div className="mps-rise mt-6 flex flex-col gap-3" style={{ animationDelay: "200ms" }}>
+          {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
               <button
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-start transition-colors duration-200"
+                className="flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-start transition-all duration-200"
                 style={{
-                  background: selected ? c.card : "transparent",
-                  border: "none",
+                  background: selected ? c.selBg : c.card,
+                  border: `${selected ? "1.5px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
+                  boxShadow: selected ? c.cardShadow : "none",
                 }}
               >
                 <span
-                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `1.5px solid ${selected ? c.text : c.faint}` }}
                 >
-                  {selected && <span className="h-[8px] w-[8px] rounded-full" style={{ background: c.text }} />}
+                  {selected && <span className="h-[10px] w-[10px] rounded-full" style={{ background: c.text }} />}
                 </span>
-                <span className="flex-1 text-[14px]" style={{ color: c.text }}>
-                  {opt.label}
-                </span>
-                <span className="flex items-baseline gap-1.5 tabular-nums" dir="ltr">
-                  <span className="text-[13px] line-through" style={{ color: c.faint }}>
-                    ${opt.block.strike}
+                <span className="flex flex-1 flex-col gap-1">
+                  <span className="flex items-center gap-2">
+                    <span className="text-[14px] font-medium" style={{ color: c.text }}>
+                      {opt.label}
+                    </span>
+                    <span
+                      className="rounded-full px-2 py-[3px] text-[11px] font-medium leading-none"
+                      style={{ background: c.badgeBg, color: c.badgeText }}
+                    >
+                      {opt.badge}
+                    </span>
                   </span>
-                  <span className="text-[16px] font-semibold" style={{ color: c.text }}>
-                    ${opt.block.price}
-                  </span>
-                  <span className="text-[12.5px]" style={{ color: c.muted }}>
-                    /{opt.unit}
+                  <span className="flex items-baseline gap-1.5 tabular-nums" dir="ltr">
+                    <span className="text-[17px] font-semibold" style={{ color: c.text }}>
+                      ${opt.price}
+                    </span>
+                    <span className="text-[12.5px]" style={{ color: c.muted }}>
+                      {opt.unit}
+                    </span>
+                    <span className="text-[13px] line-through" style={{ color: c.faint }}>
+                      ${opt.strike}
+                    </span>
                   </span>
                 </span>
               </button>
             );
           })}
         </div>
-      </div>
 
-      {/* CTA */}
-      <div
-        className="mps-rise shrink-0 px-5 pt-4"
-        style={{ animationDelay: "440ms", paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 14px)" }}
-      >
-        <button
-          type="button"
-          data-sunset="true"
-          onClick={() => onSubscribe(activeTier)}
-          disabled={isLoading}
-          className="btn-sunset flex h-[50px] w-full items-center justify-center px-6 text-[15px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+        {/* Fine print */}
+        <p
+          className="mps-rise mt-4 text-center text-[12px] leading-relaxed"
+          style={{ animationDelay: "260ms", color: c.faint }}
         >
-          {isLoading ? (
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/30 border-t-current" />
-          ) : (
-            "Upgrade now"
-          )}
-        </button>
-        <nav
-          className="mt-3 flex items-center justify-center text-[12px] leading-none"
-          style={{ color: c.faint }}
-          aria-label="Legal"
-        >
-          {([
-            { to: "/terms", label: "Terms" },
-            { to: "/privacy", label: "Privacy" },
-            { to: "/restore", label: "Restore" },
-          ] as const).map((item, i) => (
-            <span key={item.to} className="flex items-center">
-              {i > 0 && (
-                <span aria-hidden className="mx-3 h-[10px] w-px" style={{ background: c.line }} />
-              )}
-              <Link
-                to={item.to}
-                className="px-1 py-1 transition-opacity hover:opacity-100"
-                style={{ color: c.faint }}
-              >
-                {item.label}
-              </Link>
-            </span>
-          ))}
-        </nav>
+          {t.fine}
+        </p>
 
+        {/* CTA */}
+        <div
+          className="mps-rise mt-auto pt-5"
+          style={{
+            animationDelay: "320ms",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)",
+          }}
+        >
+          <button
+            type="button"
+            data-sunset="true"
+            onClick={() => onSubscribe("pro")}
+            disabled={isLoading}
+            className="btn-sunset flex h-[52px] w-full items-center justify-center rounded-2xl px-6 text-[15.5px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+          >
+            {isLoading ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/30 border-t-current" />
+            ) : (
+              t.cta
+            )}
+          </button>
+          <nav
+            className="mt-3.5 flex items-center justify-center text-[12px] leading-none"
+            style={{ color: c.faint }}
+            aria-label="Legal"
+          >
+            {([
+              { to: "/terms", label: t.terms },
+              { to: "/privacy", label: t.privacy },
+              { to: "/restore", label: t.restore },
+            ] as const).map((item, i) => (
+              <span key={item.to} className="flex items-center">
+                {i > 0 && <span aria-hidden className="mx-3.5 h-[10px] w-px" style={{ background: c.unselBorder }} />}
+                <Link to={item.to} className="px-1 py-1 transition-opacity hover:opacity-100" style={{ color: c.faint }}>
+                  {item.label}
+                </Link>
+              </span>
+            ))}
+          </nav>
+        </div>
       </div>
     </div>
   );
