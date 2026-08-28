@@ -247,37 +247,44 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[380px] flex-1 flex-col px-5">
+      <div className="relative z-10 mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
         {/* Megsy star mark */}
-        <div className="mps-rise mt-3 flex justify-center" style={{ animationDelay: "10ms", color: c.text }}>
-          <MegsyStar className="h-8 w-8" />
+        <div
+          className="mps-rise mt-[5%] flex justify-center"
+          style={{ animationDelay: "10ms", color: c.text }}
+        >
+          <MegsyStar className="h-9 w-9" />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-2 text-center text-[24px] font-normal leading-[1.15] tracking-[-0.01em]"
+          className="mps-rise mt-3 text-center text-[27px] font-normal leading-[1.2] tracking-[-0.015em]"
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
         </h1>
 
-        {/* Feature card — single-column, reference-matched */}
+        {/* Feature card — single column, airy rows like the reference */}
         <div
-          className="mps-rise mt-4 rounded-[28px] px-5 py-4"
+          className="mps-rise mt-6 rounded-[26px] px-5 py-5"
           style={{
             animationDelay: "120ms",
             background: c.card,
             border: `1px solid ${c.cardBorder}`,
+            boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-2.5">
+          <ul className="flex flex-col gap-[17px]">
             {features.map(({ icon: Icon, text }) => (
               <li
                 key={text}
-                className={`flex items-center gap-3 ${isAr ? "flex-row-reverse text-right" : ""}`}
+                className={`flex items-center gap-3.5 ${isAr ? "flex-row-reverse text-right" : ""}`}
               >
-                <Icon className="h-5 w-5 shrink-0" strokeWidth={1.4} style={{ color: c.icon }} />
-                <span className="flex-1 text-[14px] leading-snug" style={{ color: c.text }}>
+                <Icon className="h-[21px] w-[21px] shrink-0" strokeWidth={1.5} style={{ color: c.icon }} />
+                <span
+                  className="flex-1 text-[14.5px] leading-[1.35]"
+                  style={{ color: c.text }}
+                >
                   {text}
                 </span>
               </li>
@@ -285,8 +292,11 @@ export default function MobilePricingScreen({
           </ul>
         </div>
 
-        {/* Billing options — pushed to the bottom block, slightly smaller */}
-        <div className="mps-rise mt-auto flex flex-col gap-2" style={{ animationDelay: "200ms" }}>
+        {/* Breathing room, exactly like the reference */}
+        <div className="flex-1 min-h-[16px]" />
+
+        {/* Billing options */}
+        <div className="mps-rise flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -294,7 +304,7 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className={`flex w-full items-center gap-3 rounded-[18px] px-3.5 py-2.5 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
+                className={`flex w-full items-center gap-3.5 rounded-[20px] px-4 py-3 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
                 style={{
                   background: c.card,
                   border: `${selected ? "2px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
@@ -302,33 +312,39 @@ export default function MobilePricingScreen({
                 }}
               >
                 <span
-                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[19px] w-[19px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `2px solid ${selected ? c.text : c.faint}` }}
                 >
-                  {selected && <span className="h-2 w-2 rounded-full" style={{ background: c.text }} />}
+                  {selected && (
+                    <span className="h-[9px] w-[9px] rounded-full" style={{ background: c.text }} />
+                  )}
                 </span>
-                <span className="flex flex-1 flex-col gap-0.5">
-                  <span className={`flex items-center gap-2 ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}>
+                <span className="flex flex-1 flex-col gap-1">
+                  <span
+                    className={`flex items-center gap-2 ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}
+                  >
                     {opt.badge && (
                       <span
-                        className="rounded-full px-2 py-[2px] text-[10px] font-medium leading-none"
+                        className="rounded-full px-2 py-[3px] text-[10.5px] font-medium leading-none"
                         style={{ background: c.badgeBg, color: c.badgeText }}
                       >
                         {opt.badge}
                       </span>
                     )}
-                    <span className="text-[12.5px] font-medium" style={{ color: c.text }}>
+                    <span className="text-[13px] font-medium" style={{ color: c.muted }}>
                       {opt.label}
                     </span>
                   </span>
-                  <span className={`flex items-baseline gap-1.5 tabular-nums ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}>
-                    <span className="text-[15px] font-semibold" style={{ color: c.text }}>
+                  <span
+                    className={`flex items-baseline gap-2 tabular-nums ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}
+                  >
+                    <span className="text-[16.5px] font-semibold" style={{ color: c.text }}>
                       ${opt.price}
                     </span>
-                    <span className="text-[10.5px]" style={{ color: c.muted }}>
+                    <span className="text-[11px]" style={{ color: c.muted }}>
                       {opt.unit}
                     </span>
-                    <span className="text-[11px] line-through" style={{ color: c.faint }}>
+                    <span className="text-[11.5px] line-through" style={{ color: c.faint }}>
                       ${opt.strike}
                     </span>
                   </span>
@@ -340,20 +356,20 @@ export default function MobilePricingScreen({
 
         {/* Fine print + CTA + legal, pinned to the very bottom */}
         <div
-          className="mps-rise pt-2.5"
+          className="mps-rise pt-3.5"
           style={{
             animationDelay: "300ms",
             paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
           }}
         >
-          <p className="mb-2.5 text-center text-[10.5px] leading-relaxed" style={{ color: c.faint }}>
+          <p className="mb-3 text-center text-[11px] leading-[1.5]" style={{ color: c.faint }}>
             {t.fine}
           </p>
           <button
             type="button"
             onClick={() => onSubscribe("pro")}
             disabled={isLoading}
-            className="flex h-[48px] w-full items-center justify-center rounded-2xl px-6 text-[14px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            className="flex h-[52px] w-full items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
             style={{ background: c.ctaBg, color: c.ctaFg }}
           >
             {isLoading ? (
@@ -363,7 +379,7 @@ export default function MobilePricingScreen({
             )}
           </button>
           <nav
-            className="mt-3 flex items-center justify-center gap-6 text-[11.5px] leading-none"
+            className="mt-3.5 flex items-center justify-center gap-7 text-[12px] leading-none"
             style={{ color: c.faint }}
             aria-label="Legal"
           >
@@ -379,6 +395,7 @@ export default function MobilePricingScreen({
           </nav>
         </div>
       </div>
+
     </div>
   );
 }
