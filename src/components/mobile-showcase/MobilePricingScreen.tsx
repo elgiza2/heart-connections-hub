@@ -184,15 +184,15 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col px-5">
+      <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
         {/* Sparkle mark */}
-        <div className="mps-rise mt-6 flex justify-center" style={{ animationDelay: "10ms" }}>
-          <Sparkles className="h-8 w-8" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
+        <div className="mps-rise mt-3 flex justify-center" style={{ animationDelay: "10ms" }}>
+          <Sparkles className="h-6 w-6" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-5 text-center text-[28px] font-normal leading-[1.2] tracking-[-0.01em]"
+          className="mps-rise mt-3 text-center text-[23px] font-normal leading-[1.15] tracking-[-0.01em]"
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
@@ -200,7 +200,7 @@ export default function MobilePricingScreen({
 
         {/* Feature card */}
         <div
-          className="mps-rise mt-6 rounded-3xl px-6 py-6"
+          className="mps-rise mt-4 rounded-2xl px-4 py-3.5"
           style={{
             animationDelay: "120ms",
             background: c.card,
@@ -208,11 +208,11 @@ export default function MobilePricingScreen({
             boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-5">
+          <ul className="flex flex-col gap-2.5">
             {features.map(({ icon: Icon, text }, i) => (
-              <li key={text} className="flex items-center gap-4">
-                <Icon className="h-[20px] w-[20px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
-                <span className="text-[14.5px] leading-snug" style={{ color: c.text }}>
+              <li key={text} className="flex items-center gap-3">
+                <Icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
+                <span className="text-[13px] leading-snug" style={{ color: c.text }}>
                   {text}
                 </span>
               </li>
