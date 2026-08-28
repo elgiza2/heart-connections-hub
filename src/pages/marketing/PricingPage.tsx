@@ -1024,10 +1024,7 @@ const PricingPage = () => {
             );
           })}
 
-          {/* Price anchor — Max Yearly makes the monthly plans read as cheap. */}
-          {(() => {
-            const max = getPlan("elite");
-            if (!max) return null;
+          {/* Single-plan lineup — only Megsy Pro is offered. */}
             const reference = max.monthlyPrice * 12;
             const perMonth = (max.yearlyPrice / 12).toFixed(0);
             return (
