@@ -275,7 +275,9 @@ export default function MobilePricingScreen({
 
         {/* Feature card — single column, airy rows like the reference */}
         <div
-          className="mps-rise mt-6 rounded-[26px] px-5 py-5"
+          className={`mps-rise rounded-[24px] ${
+            compact ? "mt-3.5 px-4 py-3.5" : "mt-5 px-5 py-4"
+          }`}
           style={{
             animationDelay: "120ms",
             background: c.card,
@@ -283,15 +285,19 @@ export default function MobilePricingScreen({
             boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-[17px]">
+          <ul className={`flex flex-col ${compact ? "gap-[11px]" : "gap-[14px]"}`}>
             {features.map(({ icon: Icon, text }) => (
               <li
                 key={text}
-                className={`flex items-center gap-3.5 ${isAr ? "flex-row-reverse text-right" : ""}`}
+                className={`flex items-center gap-3 ${isAr ? "flex-row-reverse text-right" : ""}`}
               >
-                <Icon className="h-[21px] w-[21px] shrink-0" strokeWidth={1.5} style={{ color: c.icon }} />
+                <Icon
+                  className={`${compact ? "h-[18px] w-[18px]" : "h-[20px] w-[20px]"} shrink-0`}
+                  strokeWidth={1.5}
+                  style={{ color: c.icon }}
+                />
                 <span
-                  className="flex-1 text-[14.5px] leading-[1.35]"
+                  className={`flex-1 leading-[1.35] ${compact ? "text-[13px]" : "text-[14px]"}`}
                   style={{ color: c.text }}
                 >
                   {text}
@@ -302,7 +308,7 @@ export default function MobilePricingScreen({
         </div>
 
         {/* Breathing room, exactly like the reference */}
-        <div className="flex-1 min-h-[16px]" />
+        <div className="flex-1 min-h-[12px]" />
 
         {/* Billing options */}
         <div className="mps-rise flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
