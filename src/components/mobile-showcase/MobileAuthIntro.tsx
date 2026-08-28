@@ -104,17 +104,20 @@ export default function MobileAuthIntro({
       className="relative min-h-[100dvh] w-full overflow-hidden bg-[#02040c] text-foreground"
       style={{ fontFamily: 'Inter, -apple-system, "SF Pro Text", system-ui, sans-serif', touchAction: "manipulation" }}
     >
-      {/* Hero video */}
+      {/* Hero video — poster paints instantly, clip streams in behind it */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
+        poster={AUTH_HERO_POSTER}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         style={{ objectPosition: "center 48%", zIndex: 0 }}
-        src={AUTH_MOBILE_VIDEO_URL}
-      />
+      >
+        <source src={AUTH_HERO_WEBM} type="video/webm" />
+        <source src={AUTH_HERO_MP4} type="video/mp4" />
+      </video>
 
       {/* Bottom fade overlay */}
       <div
