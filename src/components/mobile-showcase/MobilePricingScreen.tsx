@@ -4,6 +4,8 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { Check } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
 import {
@@ -267,13 +269,31 @@ export default function MobilePricingScreen({
             "Upgrade now"
           )}
         </button>
-        <div className="mt-3 flex items-center justify-center gap-6 text-[12px]" style={{ color: c.faint }}>
-          <a href="/terms">{"Terms"}</a>
-          <a href="/privacy">{"Privacy"}</a>
-          <button type="button" onClick={() => onSubscribe(activeTier)}>
-            {"Restore"}
-          </button>
-        </div>
+        <nav
+          className="mt-3 flex items-center justify-center text-[12px] leading-none"
+          style={{ color: c.faint }}
+          aria-label="Legal"
+        >
+          {([
+            { to: "/terms", label: "Terms" },
+            { to: "/privacy", label: "Privacy" },
+            { to: "/restore", label: "Restore" },
+          ] as const).map((item, i) => (
+            <span key={item.to} className="flex items-center">
+              {i > 0 && (
+                <span aria-hidden className="mx-3 h-[10px] w-px" style={{ background: c.line }} />
+              )}
+              <Link
+                to={item.to}
+                className="px-1 py-1 transition-opacity hover:opacity-100"
+                style={{ color: c.faint }}
+              >
+                {item.label}
+              </Link>
+            </span>
+          ))}
+        </nav>
+
       </div>
     </div>
   );
