@@ -10,6 +10,7 @@ import {
   Bot,
   Search,
   Infinity as InfinityIcon,
+  Sparkles,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
