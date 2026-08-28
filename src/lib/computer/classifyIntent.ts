@@ -1,8 +1,7 @@
 /**
- * @doc Model-backed router for "does this turn need a real computer?".
- * The regex heuristic stays as the instant fast path / fallback; whenever it is
- * unsure we ask the model for a tiny JSON verdict so odd phrasings, dialects
- * and follow-ups still reach the computer agent.
+ * @doc Router for "does this turn need a real computer?".
+ * Regex/heuristic only — it runs before every send, so it must never block on
+ * a network call.
  */
 import { isAffirmation, shouldUseComputer } from "./shouldUseComputer";
 
