@@ -52,6 +52,9 @@ export const makeLeakedToolStreamSanitizer = () => {
     "```tool_call",
     "```function_call",
     "```python",
+    "```json",
+    '{"action"',
+    '{ "action"',
   ];
   return (chunk: string, force = false) => {
     buffer += chunk;
