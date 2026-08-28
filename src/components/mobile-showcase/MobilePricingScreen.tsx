@@ -2,7 +2,7 @@
  *  Single plan (Megsy Pro): sparkle mark · serif title · white feature card
  *  with icon rows · two billing option cards · fine print · CTA · legal links.
  */
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Sparkles,
   MonitorSmartphone,
@@ -16,7 +16,21 @@ import { Link } from "react-router-dom";
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
 import { getDisplayPrice, getPlan, type PlanTier } from "@/data/pricingData";
-import { useIsLightTheme } from "@/hooks/useIsLightTheme";
+function useIsLightTheme() {
+  const [light, setLight] = useState(
+    typeof document !== "undefined" &&
+      document.documentElement.getAttribute("data-theme") === "light",
+  );
+  useEffect(() => {
+    const el = document.documentElement;
+    const update = () => setLight(el.getAttribute("data-theme") === "light");
+    const obs = new MutationObserver(update);
+    obs.observe(el, { attributes: true, attributeFilter: ["data-theme"] });
+    update();
+    return () => obs.disconnect();
+  }, []);
+  return light;
+}
 
 interface Props {
   isYearly: boolean;
