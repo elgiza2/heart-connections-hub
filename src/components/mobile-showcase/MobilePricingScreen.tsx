@@ -257,15 +257,17 @@ export default function MobilePricingScreen({
       <div className="relative z-10 mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
         {/* Megsy star mark */}
         <div
-          className="mps-rise mt-[5%] flex justify-center"
+          className={`mps-rise flex justify-center ${compact ? "mt-[2%]" : "mt-[4%]"}`}
           style={{ animationDelay: "10ms", color: c.text }}
         >
-          <MegsyStar className="h-9 w-9" />
+          <MegsyStar className={compact ? "h-7 w-7" : "h-8 w-8"} />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-3 text-center text-[27px] font-normal leading-[1.2] tracking-[-0.015em]"
+          className={`mps-rise text-center font-normal leading-[1.2] tracking-[-0.015em] ${
+            compact ? "mt-2 text-[22px]" : "mt-2.5 text-[25px]"
+          }`}
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
