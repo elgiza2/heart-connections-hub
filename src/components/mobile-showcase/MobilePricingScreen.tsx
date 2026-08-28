@@ -58,27 +58,45 @@ export default function MobilePricingScreen({
   const isLight = useIsLightTheme();
   const isLoading = loadingTier === "pro";
 
-  const features = useMemo(
-    () =>
-      isAr
-        ? [
-            { icon: MegsyFeatureIcon, text: "240 رصيد Megsy شهرياً" },
-            { icon: Monitor, text: "كمبيوتر سحابي حقيقي" },
-            { icon: Clock, text: "مهام حتى 4 ساعات" },
-            { icon: Bot, text: "3 وكلاء متوازيين" },
-            { icon: Search, text: "بحث عميق موثّق بالمصادر" },
-            { icon: InfinityIcon, text: "دردشة وتوليد صور بلا حدود" },
-          ]
-        : [
-            { icon: MegsyFeatureIcon, text: "240 Megsy Credits every month" },
-            { icon: Monitor, text: "A real cloud computer" },
-            { icon: Clock, text: "Tasks up to 4 hours" },
-            { icon: Bot, text: "3 agents in parallel" },
-            { icon: Search, text: "Deep research with citations" },
-            { icon: InfinityIcon, text: "Unlimited chat & images" },
-          ],
-    [isAr],
-  );
+  // Feature list changes with the billing interval: the yearly plan is the only
+  // one that advertises monthly credits + the locked price.
+  const features = useMemo(() => {
+    const base = isAr
+      ? [
+          { icon: Monitor, text: "كمبيوتر سحابي حقيقي" },
+          { icon: Clock, text: "مهام حتى 4 ساعات" },
+          { icon: Bot, text: "3 وكلاء متوازيين" },
+          { icon: Search, text: "بحث عميق موثّق بالمصادر" },
+          { icon: InfinityIcon, text: "دردشة وتوليد صور بلا حدود" },
+        ]
+      : [
+          { icon: Monitor, text: "A real cloud computer" },
+          { icon: Clock, text: "Tasks up to 4 hours" },
+          { icon: Bot, text: "3 agents in parallel" },
+          { icon: Search, text: "Deep research with citations" },
+          { icon: InfinityIcon, text: "Unlimited chat & images" },
+        ];
+
+    const head = isYearly
+      ? [
+          {
+            icon: MegsyFeatureIcon,
+            text: isAr ? "240 رصيد Megsy كل شهر" : "240 Megsy Credits every month",
+          },
+          {
+            icon: Sparkles,
+            text: isAr ? "السعر ثابت لمدة 12 شهراً" : "Price locked for 12 months",
+          },
+        ]
+      : [
+          {
+            icon: MegsyFeatureIcon,
+            text: isAr ? "240 رصيد Megsy مع الاشتراك" : "240 Megsy Credits with your plan",
+          },
+        ];
+
+    return [...head, ...base];
+  }, [isAr, isYearly]);
 
   const t = isAr
     ? {
