@@ -20,6 +20,7 @@ export function MobileSidebarButton({
       onClick={onClick}
       aria-label={ariaLabel}
       data-testid={testId}
+      style={{ border: "none", outline: "none", boxShadow: "none" }}
       className={cn(
         "md:hidden w-11 h-11 rounded-2xl flex items-center justify-center text-foreground bg-transparent border-0 active:scale-95 transition",
         className,
