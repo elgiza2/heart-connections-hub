@@ -75,6 +75,7 @@ export default function MobilePricingScreen({
   const lang = useUserLang();
   const isAr = lang === "ar";
   const isLight = useIsLightTheme();
+  const compact = useCompactHeight();
   const isLoading = loadingTier === "pro";
 
   // Always exactly 6 rows so the card height (and the CTA position) never
