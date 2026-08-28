@@ -20,13 +20,8 @@ const ResetPasswordPage = () => {
   const longPressTimerRef = useRef<number | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const prev = document.documentElement.getAttribute("data-theme");
-    document.documentElement.setAttribute("data-theme", "dark");
-    return () => {
-      if (prev) document.documentElement.setAttribute("data-theme", prev);
-    };
-  }, []);
+  useEffect(() => forceDarkTheme(), []);
+
 
   const openClipboardMenu = (input: HTMLInputElement, x: number, y: number) => {
     input.focus();

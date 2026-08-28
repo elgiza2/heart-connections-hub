@@ -131,13 +131,8 @@ const AuthPage = () => {
   });
   const [showReferralField, setShowReferralField] = useState<boolean>(!!referralCode);
 
-  useEffect(() => {
-    const prev = document.documentElement.getAttribute("data-theme");
-    document.documentElement.setAttribute("data-theme", "dark");
-    return () => {
-      if (prev) document.documentElement.setAttribute("data-theme", prev);
-    };
-  }, []);
+  useEffect(() => forceDarkTheme(), []);
+
 
   useEffect(() => {
     const closeMenu = (event: PointerEvent) => {
