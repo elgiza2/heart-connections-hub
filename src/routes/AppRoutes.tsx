@@ -61,6 +61,7 @@ import {
   // marketing
   PricingPage,
   LegalPage,
+  RestorePurchasePage,
   NotFoundPage,
   OnboardingPage,
 } from "./lazyPages";
@@ -204,6 +205,7 @@ export const AppRoutes = ({ currentUserId }: { currentUserId: string | null }) =
     <Route path="/privacy" element={<LegalPage slug="privacy" />} />
     <Route path="/cookies" element={toChat} />
     <Route path="/refund" element={<LegalPage slug="refund" />} />
+    <Route path="/restore" element={<RestorePurchasePage />} />
     <Route path="/policies/*" element={toChat} />
     <Route path="/legal/*" element={toChat} />
 

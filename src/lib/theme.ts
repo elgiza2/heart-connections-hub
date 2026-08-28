@@ -70,3 +70,21 @@ export const setTheme = (mode: ThemeMode): void => {
   applyTheme(mode);
   window.dispatchEvent(new CustomEvent("megsy:theme", { detail: mode }));
 };
+
+/**
+ * Paint a full dark theme for screens that are always dark (auth, reset).
+ * Toggles the `dark`/`light` classes and `color-scheme` too — setting only
+ * `data-theme` left Tailwind dark variants on the light palette, which showed
+ * up as washed-out / mismatched colors on the auth screens.
+ * Returns a cleanup that repaints the user's stored theme.
+ */
+export const forceDarkTheme = (): (() => void) => {
+  const html = document.documentElement;
+  html.setAttribute("data-theme", "dark");
+  html.classList.add("dark");
+  html.classList.remove("light");
+  html.style.colorScheme = "dark";
+  return () => {
+    applyTheme(getStoredTheme());
+  };
+};
