@@ -963,7 +963,8 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
               </div>
             )}
           </div>
-        </>
+        </div>
+
       )}
       <Suspense fallback={null}>
         {canvasOpen && (
