@@ -311,7 +311,10 @@ export default function MobilePricingScreen({
         <div className="flex-1 min-h-[12px]" />
 
         {/* Billing options */}
-        <div className="mps-rise flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
+        <div
+          className={`mps-rise flex flex-col ${compact ? "gap-2" : "gap-2.5"}`}
+          style={{ animationDelay: "200ms" }}
+        >
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -319,7 +322,9 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className={`flex w-full items-center gap-3.5 rounded-[20px] px-4 py-3 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
+                className={`flex w-full items-center gap-3 rounded-[18px] px-4 text-start transition-all duration-200 ${
+                  compact ? "py-2" : "py-2.5"
+                } ${isAr ? "flex-row-reverse" : ""}`}
                 style={{
                   background: c.card,
                   border: `${selected ? "2px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
@@ -327,11 +332,11 @@ export default function MobilePricingScreen({
                 }}
               >
                 <span
-                  className="flex h-[19px] w-[19px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `2px solid ${selected ? c.text : c.faint}` }}
                 >
                   {selected && (
-                    <span className="h-[9px] w-[9px] rounded-full" style={{ background: c.text }} />
+                    <span className="h-[8px] w-[8px] rounded-full" style={{ background: c.text }} />
                   )}
                 </span>
                 <span className="flex flex-1 flex-col gap-1">
