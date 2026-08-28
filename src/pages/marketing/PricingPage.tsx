@@ -30,7 +30,9 @@ import {
   getPlan,
   type PlanTier,
 } from "@/data/pricingData";
-import { markCheckoutOpened } from "@/lib/pricingOffers";
+import { markCheckoutOpened, hasAbandonedCheckout } from "@/lib/pricingOffers";
+import { dodoProductId } from "@/lib/dodoCatalog";
+
 
 import { brandText, getZoneBrand } from "@/lib/zoneBrand";
 import { isEgMode } from "@/lib/egMode";
@@ -365,9 +367,18 @@ const PricingPage = () => {
       }
 
       const { data, error } = await invokeFunction("openrouter-media", {
-        body: { kind: "checkout", tier, interval, trial, provider },
+        body: {
+          kind: "checkout",
+          tier,
+          interval,
+          trial,
+          provider,
+          // Dodo product to open (server may override from its own catalog).
+          product_id: dodoProductId(interval, hasAbandonedCheckout()),
+        },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
+
       if (error) {
         const msg = (error as any)?.message?.toLowerCase?.() || "";
         if (msg.includes("unauthorized") || msg.includes("401") || msg.includes("jwt")) {
