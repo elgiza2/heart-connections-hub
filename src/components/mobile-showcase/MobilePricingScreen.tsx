@@ -184,15 +184,15 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col px-5">
+      <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
         {/* Sparkle mark */}
-        <div className="mps-rise mt-6 flex justify-center" style={{ animationDelay: "10ms" }}>
-          <Sparkles className="h-8 w-8" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
+        <div className="mps-rise mt-3 flex justify-center" style={{ animationDelay: "10ms" }}>
+          <Sparkles className="h-6 w-6" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-5 text-center text-[28px] font-normal leading-[1.2] tracking-[-0.01em]"
+          className="mps-rise mt-3 text-center text-[23px] font-normal leading-[1.15] tracking-[-0.01em]"
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
@@ -200,7 +200,7 @@ export default function MobilePricingScreen({
 
         {/* Feature card */}
         <div
-          className="mps-rise mt-6 rounded-3xl px-6 py-6"
+          className="mps-rise mt-4 rounded-2xl px-4 py-3.5"
           style={{
             animationDelay: "120ms",
             background: c.card,
@@ -208,11 +208,11 @@ export default function MobilePricingScreen({
             boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-5">
+          <ul className="flex flex-col gap-2.5">
             {features.map(({ icon: Icon, text }, i) => (
-              <li key={text} className="flex items-center gap-4">
-                <Icon className="h-[20px] w-[20px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
-                <span className="text-[14.5px] leading-snug" style={{ color: c.text }}>
+              <li key={text} className="flex items-center gap-3">
+                <Icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
+                <span className="text-[13px] leading-snug" style={{ color: c.text }}>
                   {text}
                 </span>
               </li>
@@ -221,7 +221,7 @@ export default function MobilePricingScreen({
         </div>
 
         {/* Billing options */}
-        <div className="mps-rise mt-6 flex flex-col gap-3" style={{ animationDelay: "200ms" }}>
+        <div className="mps-rise mt-4 flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -229,7 +229,7 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className="flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-start transition-all duration-200"
+                className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-start transition-all duration-200"
                 style={{
                   background: selected ? c.selBg : c.card,
                   border: `${selected ? "1.5px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
@@ -237,31 +237,31 @@ export default function MobilePricingScreen({
                 }}
               >
                 <span
-                  className="flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `1.5px solid ${selected ? c.text : c.faint}` }}
                 >
-                  {selected && <span className="h-[10px] w-[10px] rounded-full" style={{ background: c.text }} />}
+                  {selected && <span className="h-[9px] w-[9px] rounded-full" style={{ background: c.text }} />}
                 </span>
-                <span className="flex flex-1 flex-col gap-1">
+                <span className="flex flex-1 flex-col gap-0.5">
                   <span className="flex items-center gap-2">
-                    <span className="text-[14px] font-medium" style={{ color: c.text }}>
+                    <span className="text-[13px] font-medium" style={{ color: c.text }}>
                       {opt.label}
                     </span>
                     <span
-                      className="rounded-full px-2 py-[3px] text-[11px] font-medium leading-none"
+                      className="rounded-full px-1.5 py-[2px] text-[10px] font-medium leading-none"
                       style={{ background: c.badgeBg, color: c.badgeText }}
                     >
                       {opt.badge}
                     </span>
                   </span>
                   <span className="flex items-baseline gap-1.5 tabular-nums" dir="ltr">
-                    <span className="text-[17px] font-semibold" style={{ color: c.text }}>
+                    <span className="text-[15px] font-semibold" style={{ color: c.text }}>
                       ${opt.price}
                     </span>
-                    <span className="text-[12.5px]" style={{ color: c.muted }}>
+                    <span className="text-[11.5px]" style={{ color: c.muted }}>
                       {opt.unit}
                     </span>
-                    <span className="text-[13px] line-through" style={{ color: c.faint }}>
+                    <span className="text-[12px] line-through" style={{ color: c.faint }}>
                       ${opt.strike}
                     </span>
                   </span>
@@ -273,7 +273,7 @@ export default function MobilePricingScreen({
 
         {/* Fine print */}
         <p
-          className="mps-rise mt-4 text-center text-[12px] leading-relaxed"
+          className="mps-rise mt-3 text-center text-[11px] leading-relaxed"
           style={{ animationDelay: "260ms", color: c.faint }}
         >
           {t.fine}
@@ -281,10 +281,10 @@ export default function MobilePricingScreen({
 
         {/* CTA */}
         <div
-          className="mps-rise mt-auto pt-5"
+          className="mps-rise mt-auto pt-3"
           style={{
             animationDelay: "320ms",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
           }}
         >
           <button
@@ -292,7 +292,7 @@ export default function MobilePricingScreen({
             data-sunset="true"
             onClick={() => onSubscribe("pro")}
             disabled={isLoading}
-            className="btn-sunset flex h-[52px] w-full items-center justify-center rounded-2xl px-6 text-[15.5px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            className="btn-sunset flex h-[46px] w-full items-center justify-center rounded-xl px-6 text-[14.5px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
           >
             {isLoading ? (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/30 border-t-current" />
@@ -301,7 +301,7 @@ export default function MobilePricingScreen({
             )}
           </button>
           <nav
-            className="mt-3.5 flex items-center justify-center text-[12px] leading-none"
+            className="mt-2.5 flex items-center justify-center text-[11.5px] leading-none"
             style={{ color: c.faint }}
             aria-label="Legal"
           >
@@ -311,7 +311,7 @@ export default function MobilePricingScreen({
               { to: "/restore", label: t.restore },
             ] as const).map((item, i) => (
               <span key={item.to} className="flex items-center">
-                {i > 0 && <span aria-hidden className="mx-3.5 h-[10px] w-px" style={{ background: c.unselBorder }} />}
+                {i > 0 && <span aria-hidden className="mx-3 h-[10px] w-px" style={{ background: c.unselBorder }} />}
                 <Link to={item.to} className="px-1 py-1 transition-opacity hover:opacity-100" style={{ color: c.faint }}>
                   {item.label}
                 </Link>
