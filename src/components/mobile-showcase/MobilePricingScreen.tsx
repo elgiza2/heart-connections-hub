@@ -321,8 +321,11 @@ export default function MobilePricingScreen({
                 </span>
                 <span className="flex flex-1 flex-col gap-1">
                   <span
-                    className={`flex items-center gap-2 ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}
+                    className={`flex items-center gap-2 ${isAr ? "flex-row-reverse" : ""} justify-start`}
                   >
+                    <span className="text-[13px] font-medium" style={{ color: c.muted }}>
+                      {opt.label}
+                    </span>
                     {opt.badge && (
                       <span
                         className="rounded-full px-2 py-[3px] text-[10.5px] font-medium leading-none"
@@ -331,12 +334,9 @@ export default function MobilePricingScreen({
                         {opt.badge}
                       </span>
                     )}
-                    <span className="text-[13px] font-medium" style={{ color: c.muted }}>
-                      {opt.label}
-                    </span>
                   </span>
                   <span
-                    className={`flex items-baseline gap-2 tabular-nums ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}
+                    className={`flex items-baseline gap-2 tabular-nums ${isAr ? "flex-row-reverse" : ""} justify-start`}
                   >
                     <span className="text-[16.5px] font-semibold" style={{ color: c.text }}>
                       ${opt.price}
