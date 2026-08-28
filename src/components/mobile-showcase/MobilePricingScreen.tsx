@@ -18,6 +18,12 @@ import MegsyStar from "@/components/branding/MegsyStar";
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
 import { getDisplayPrice, getPlan, type PlanTier } from "@/data/pricingData";
+import {
+  INTRO_PRICE,
+  WINBACK_PRICE,
+  WINBACK_YEARLY_PRICE,
+  hasAbandonedCheckout,
+} from "@/lib/pricingOffers";
 
 function MegsyFeatureIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return <MegsyStar className={className ?? "h-5 w-5"} />;
