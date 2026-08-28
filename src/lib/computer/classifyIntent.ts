@@ -83,12 +83,10 @@ export async function routeComputerIntent(
     return { use: true, task: raw, source: "heuristic" };
   }
 
-  // Only worth a model round-trip when the message reads like a request.
-  if (raw.length < 12) return { use: false, task: raw, source: "none" };
-
-  const verdict = await askModel(raw);
-  if (verdict?.use) {
-    return { use: true, task: verdict.task || raw, source: "model" };
-  }
+  // Deliberately no model round-trip here: this runs before every send, and
+  // waiting on an extra LLM call made the first Send feel frozen. The regex
+  // heuristic above is the router; anything it doesn't recognise stays a
+  // normal chat turn, and the user can still say "@computer" explicitly.
   return { use: false, task: raw, source: "none" };
+
 }
