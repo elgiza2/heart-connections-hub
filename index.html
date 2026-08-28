@@ -64,12 +64,36 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" /></noscript>
-    <!-- Every secondary family in ONE non-blocking request (was 5 separate
-         stylesheets + an unused icon font = 6 extra round-trips before the
-         browser could finish font loading). print→all keeps it off the
-         critical path. Families with no remaining CSS/JS reference (Anton SC,
-         Work Sans, Space Mono) were dropped — they were pure download cost. -->
-    <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+Arabic:wght@400;600;700&family=Almarai:wght@300;400;700;800&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Readex+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" />
+    <!-- Every secondary family in ONE request, injected only AFTER `load` +
+         idle. These families are used by inner surfaces (showcase, Arabic UI,
+         marketing), never by the first painted frame, so requesting them
+         during startup only stole bandwidth from the entry bundle. Skipped
+         entirely on Data Saver / 2G connections. -->
+    <script>
+      (function () {
+        var HREF =
+          "https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+Arabic:wght@400;600;700&family=Almarai:wght@300;400;700;800&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Readex+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap";
+        var EXTRA = "https://db.onlinewebfonts.com/c/e66905e07608167a84e6ad52f638c3c6?family=Helvetica+Now+Var";
+        function add(href) {
+          var l = document.createElement("link");
+          l.rel = "stylesheet";
+          l.href = href;
+          document.head.appendChild(l);
+        }
+        function go() {
+          try {
+            var c = navigator.connection || {};
+            if (c.saveData) return;
+            if (/2g/.test(c.effectiveType || "")) return;
+          } catch (e) {}
+          var run = function () { add(HREF); add(EXTRA); };
+          if (window.requestIdleCallback) requestIdleCallback(run, { timeout: 3000 });
+          else setTimeout(run, 800);
+        }
+        if (document.readyState === "complete") go();
+        else window.addEventListener("load", go, { once: true });
+      })();
+    </script>
 
 
     <!-- ITC Garamond Std Narrow (mobile showcase screens) -->
@@ -87,7 +111,7 @@
         src: url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrow_xjfoc0.woff2") format("woff2"),
              url("https://res.cloudinary.com/dgupuutfn/raw/upload/v1783596334/ITCGaramondStd-BkNarrow_wfoxm1.woff") format("woff"); }
     </style>
-    <link href="https://db.onlinewebfonts.com/c/e66905e07608167a84e6ad52f638c3c6?family=Helvetica+Now+Var" rel="stylesheet" media="print" onload="this.media='all'" />
+    
     
   
   <meta name="description" content="Chat, generate images, create videos, build slides, docs and full apps — one AI platform with every top model. Free to start.">

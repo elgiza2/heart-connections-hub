@@ -62,31 +62,32 @@ export interface PlanCardConfig {
 }
 
 // Specs are written in a fixed order so Pro and Max read as the same list
-// with different numbers: chat → images → video → research → documents →
-// build → agents → workspace → support.
+// with different numbers, and the headline capabilities come first:
+// cloud computer → long-running tasks → agents → research → chat →
+// images/video → docs & build → workspace → support.
 const PRO_FEATURES = [
+  "Cloud Computer — Megsy operates a real browser and desktop for you",
+  "Long-running tasks up to 4 hours, continue while you are offline",
+  "3 background agents working in parallel",
+  "Deep Research with citation-backed reports",
   "Unlimited chat with every flagship model",
   "Unlimited image generation — no caps, no credits",
   `Up to 40 premium videos a month (${PLAN_MONTHLY_CREDITS.pro} MC)`,
-  "Unlimited standard video models",
-  "Deep Research with citation-backed reports",
-  "Docs & Slides — editable, export to PDF and PPTX",
-  "Megsy Coder — build and deploy an app in one click",
-  "Background agents for long-running tasks",
+  "Docs, Slides & Megsy Coder — export, build and deploy",
   "Team workspace with shared projects and files",
   "Priority support · cancel anytime",
 ];
 
 const MAX_FEATURES = [
+  "Cloud Computer with longer sessions and parallel machines",
+  "Long-running tasks up to 12 hours with automatic recovery",
+  "Unlimited parallel background agents",
+  "Deep Research at Ultra depth — longer, deeper report runs",
   "Everything in Pro, without daily limits",
   "Unlimited image generation — no caps, no credits",
   `Up to 120 premium videos a month (${PLAN_MONTHLY_CREDITS.elite} MC)`,
-  "Priority compute lane — up to 3× faster generations",
-  "Deep Research with longer, deeper report runs",
-  "Larger uploads and longer context windows",
-  "Unlimited parallel background agents",
-  "Advanced branding, presets and usage analytics",
-  "Early access to new models and features",
+  "Priority compute lane — up to 3× faster runs",
+  "Larger uploads, longer context and usage analytics",
   "24/7 priority support · cancel anytime",
 ];
 
@@ -232,6 +233,18 @@ export const ENTERPRISE_FEATURES: string[] = [
 ];
 
 export const SERVICES_GUIDE: { name: string; desc: string }[] = [
+  {
+    name: "Cloud Computer",
+    desc: "Megsy drives a real cloud browser and desktop — it clicks, types, fills forms, downloads files and finishes the job while you watch. Included on Pro; Max gets longer sessions and parallel machines.",
+  },
+  {
+    name: "Long-Running Tasks",
+    desc: "Hand over work that takes hours. Tasks keep running after you close the app and pick up where they stopped — up to 4 hours on Pro and 12 hours on Max, with automatic recovery.",
+  },
+  {
+    name: "Background Agents",
+    desc: "Agents work in parallel on separate jobs and report back when done. 3 in parallel on Pro, unlimited on Max.",
+  },
   {
     name: "Unlimited Chat",
     desc: "Talk to Megsy AI with every flagship model and no daily caps on Pro and Max. The free plan uses Megsy Lite.",

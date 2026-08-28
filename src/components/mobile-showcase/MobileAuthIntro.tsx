@@ -4,8 +4,11 @@ import { AlertCircle, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useBrandLogo } from "@/hooks/useBrandLogo";
 import { t as authT, useUserLang } from "@/lib/authI18n";
 
-const AUTH_MOBILE_VIDEO_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260424_064411_9e9d7f84-9277-41f4-ab10-59172d89e6be.mp4";
+// Self-hosted, compressed hero clip (663KB mp4 / 1MB webm instead of the old
+// 33MB 3328x2492 CDN file that never finished loading on mobile networks).
+const AUTH_HERO_MP4 = "/route-assets/auth/auth-hero.mp4";
+const AUTH_HERO_WEBM = "/route-assets/auth/auth-hero.webm";
+const AUTH_HERO_POSTER = "/route-assets/auth/auth-hero-poster.jpg";
 interface Props {
   onGoogle: () => void;
   onEmail: () => void;
@@ -101,17 +104,20 @@ export default function MobileAuthIntro({
       className="relative min-h-[100dvh] w-full overflow-hidden bg-[#02040c] text-foreground"
       style={{ fontFamily: 'Inter, -apple-system, "SF Pro Text", system-ui, sans-serif', touchAction: "manipulation" }}
     >
-      {/* Hero video */}
+      {/* Hero video — poster paints instantly, clip streams in behind it */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
+        poster={AUTH_HERO_POSTER}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         style={{ objectPosition: "center 48%", zIndex: 0 }}
-        src={AUTH_MOBILE_VIDEO_URL}
-      />
+      >
+        <source src={AUTH_HERO_WEBM} type="video/webm" />
+        <source src={AUTH_HERO_MP4} type="video/mp4" />
+      </video>
 
       {/* Bottom fade overlay */}
       <div

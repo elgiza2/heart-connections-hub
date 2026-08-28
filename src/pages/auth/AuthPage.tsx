@@ -31,8 +31,11 @@ import {
 } from "@/lib/validation/schemas";
 import { useRateLimit } from "@/lib/guards/rateLimiter";
 
-const AUTH_MOBILE_VIDEO_URL =
-  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260424_064411_9e9d7f84-9277-41f4-ab10-59172d89e6be.mp4";
+// Self-hosted compressed hero clip (see MobileAuthIntro) — the old 33MB CDN
+// file was too large to ever start playing on real connections.
+const AUTH_HERO_MP4 = "/route-assets/auth/auth-hero.mp4";
+const AUTH_HERO_WEBM = "/route-assets/auth/auth-hero.webm";
+const AUTH_HERO_POSTER = "/route-assets/auth/auth-hero-poster.jpg";
 const AUTH_ASSET_BASE = "/route-assets/auth";
 
 type Step =
@@ -1359,15 +1362,18 @@ const AuthPage = () => {
           />
           {!isMobile && (
           <video
-            src={AUTH_MOBILE_VIDEO_URL}
-            poster={`${AUTH_ASSET_BASE}/auth-mobile-fallback.webp`}
+            poster={AUTH_HERO_POSTER}
             autoPlay
             loop
             muted
             playsInline
+            preload="metadata"
             onLoadedData={() => setVideoLoaded(true)}
             className="absolute inset-0 w-full h-full object-cover"
-          />
+          >
+            <source src={AUTH_HERO_WEBM} type="video/webm" />
+            <source src={AUTH_HERO_MP4} type="video/mp4" />
+          </video>
           )}
         </aside>
       </div>
