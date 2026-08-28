@@ -157,7 +157,7 @@ export default function CoderProjectCard({ files: initialFiles, summary, project
       )}
 
 
-      <div className="flex flex-wrap gap-2 px-4 py-3">
+      <div className="flex flex-wrap gap-2">
         <Button size="sm" onClick={() => setCanvasOpen(true)} className="h-8 text-xs">
           <Eye className="h-3.5 w-3.5 mr-1" /> Preview
         </Button>
