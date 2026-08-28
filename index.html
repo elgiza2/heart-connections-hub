@@ -49,9 +49,13 @@
             "TelegramWebviewProxy" in window ||
             /Telegram/i.test(navigator.userAgent);
           if (!inTelegram) return;
-          var s = document.createElement("script");
-          s.src = "https://telegram.org/js/telegram-web-app.js";
-          document.head.appendChild(s);
+          // document.write keeps the SDK parser-blocking *inside Telegram only*,
+          // so window.Telegram.WebApp is guaranteed to exist before main.tsx
+          // reads initData. Web visitors never pay for this request.
+          document.write(
+            '<script src="https://telegram.org/js/telegram-web-app.js"><\/script>'
+          );
+
         } catch (e) {}
       })();
     </script>
