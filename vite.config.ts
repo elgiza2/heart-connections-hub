@@ -634,9 +634,21 @@ function transcribeDevPlugin(): Plugin {
   };
 }
 
+// Stamps index.html's `%VITE_BUILD_ID%` placeholder with a real value. Without
+// it Vite logs a "not defined in env" warning on every dev start and ships the
+// raw placeholder to production.
+const buildIdPlugin = () => ({
+  name: "megsy-build-id",
+  transformIndexHtml(html: string) {
+    return html.replace(/%VITE_BUILD_ID%/g, String(Date.now()));
+  },
+});
+
 export default defineConfig({
   plugins: [
+    buildIdPlugin(),
     devServerBridgePlugin(),
+
     react({
       babel: {
         plugins: [
