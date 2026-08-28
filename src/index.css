@@ -3734,17 +3734,6 @@ select,
   }
 }
 
-@keyframes sunset-glass-sheen {
-  0%,
-  100% {
-    transform: translateX(-140%);
-  }
-  55%,
-  100% {
-    transform: translateX(140%);
-  }
-}
-
 .btn-sunset {
   position: relative;
   isolation: isolate;
