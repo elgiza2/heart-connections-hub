@@ -61,29 +61,35 @@ export interface PlanCardConfig {
   isDark?: boolean;
 }
 
+// Specs are written in a fixed order so Pro and Max read as the same list
+// with different numbers: chat → images → video → research → documents →
+// build → agents → workspace → support.
 const PRO_FEATURES = [
   "Unlimited chat with every flagship model",
   "Unlimited image generation — no caps, no credits",
-  "Up to 40 premium videos a month (240 MC)",
-  "Free DeAPI video models — unlimited",
-  "Deep Research with sourced, citation-backed reports",
-  "Docs & Slides — generated, editable, export to PDF/PPTX",
-  "Megsy Coder — build and deploy full apps in one click",
-  "Megsy OS agents running tasks in the background",
+  `Up to 40 premium videos a month (${PLAN_MONTHLY_CREDITS.pro} MC)`,
+  "Unlimited standard video models",
+  "Deep Research with citation-backed reports",
+  "Docs & Slides — editable, export to PDF and PPTX",
+  "Megsy Coder — build and deploy an app in one click",
+  "Background agents for long-running tasks",
   "Team workspace with shared projects and files",
   "Priority support · cancel anytime",
 ];
 
 const MAX_FEATURES = [
-  "Everything in Pro, with no daily limits anywhere",
-  "Unlimited images plus up to 120 premium videos a month (600 MC)",
+  "Everything in Pro, without daily limits",
+  "Unlimited image generation — no caps, no credits",
+  `Up to 120 premium videos a month (${PLAN_MONTHLY_CREDITS.elite} MC)`,
   "Priority compute lane — up to 3× faster generations",
-  "Unlimited parallel Megsy OS agents",
-  "Longer context, larger uploads and bigger projects",
+  "Deep Research with longer, deeper report runs",
+  "Larger uploads and longer context windows",
+  "Unlimited parallel background agents",
   "Advanced branding, presets and usage analytics",
   "Early access to new models and features",
   "24/7 priority support · cancel anytime",
 ];
+
 
 /** Yearly = 8 × monthly, i.e. 4 months free. */
 export const YEARLY_FREE_MONTHS = 4;
