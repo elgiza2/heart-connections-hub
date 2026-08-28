@@ -120,7 +120,7 @@ export default function MobilePricingScreen({
       `}</style>
 
       {/* Header */}
-      <header className="relative shrink-0 px-4" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 8px)" }}>
+      <header className="relative shrink-0 px-4" style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 2px)" }}>
         <MobileSidebarButton
           onClick={() => onMenuClick?.()}
           ariaLabel="Menu"
@@ -128,9 +128,9 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="flex flex-1 flex-col justify-start gap-4 px-5 pb-2 pt-2">
+      <div className="flex flex-1 flex-col justify-start gap-3 px-5 pb-2 pt-0">
         {/* Plan card fan */}
-        <div className="mps-rise mx-auto flex h-[148px] w-full max-w-[420px] items-center justify-center" style={{ animationDelay: "20ms" }}>
+        <div className="mps-rise mx-auto flex h-[132px] w-full max-w-[420px] items-center justify-center" style={{ animationDelay: "20ms" }}>
           <PlanCard
             plan="starter"
             className="h-[110px] w-[150px] shrink-0 -mr-8"
