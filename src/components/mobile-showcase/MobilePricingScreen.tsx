@@ -65,8 +65,8 @@ export default function MobilePricingScreen({
   const isLight = useIsLightTheme();
   const isLoading = loadingTier === "pro";
 
-  // Feature list changes with the billing interval: the yearly plan is the only
-  // one that advertises monthly credits + the locked price.
+  // Always exactly 6 rows so the card height (and the CTA position) never
+  // shifts when the billing interval changes — only the first row's copy does.
   const features = useMemo(() => {
     const base = isAr
       ? [
@@ -84,26 +84,20 @@ export default function MobilePricingScreen({
           { icon: InfinityIcon, text: "Unlimited chat & images" },
         ];
 
-    const head = isYearly
-      ? [
-          {
-            icon: MegsyFeatureIcon,
-            text: isAr ? "240 رصيد Megsy كل شهر" : "240 Megsy Credits every month",
-          },
-          {
-            icon: Sparkles,
-            text: isAr ? "السعر ثابت لمدة 12 شهراً" : "Price locked for 12 months",
-          },
-        ]
-      : [
-          {
-            icon: MegsyFeatureIcon,
-            text: isAr ? "240 رصيد Megsy مع الاشتراك" : "240 Megsy Credits with your plan",
-          },
-        ];
+    const head = {
+      icon: MegsyFeatureIcon,
+      text: isYearly
+        ? isAr
+          ? "240 رصيد Megsy كل شهر"
+          : "240 Megsy Credits every month"
+        : isAr
+          ? "240 رصيد Megsy مع الاشتراك"
+          : "240 Megsy Credits with your plan",
+    };
 
-    return [...head, ...base];
+    return [head, ...base];
   }, [isAr, isYearly]);
+
 
   // Win-back: the user opened checkout, came back without paying.
   const [winback, setWinback] = useState(false);
