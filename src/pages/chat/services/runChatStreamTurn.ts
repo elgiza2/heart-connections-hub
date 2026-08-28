@@ -5,10 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { getCachedUser } from "@/lib/cachedUser";
 import { streamChat, GUEST_QUOTA_ERROR } from "@/lib/streamChat";
 import { shouldUseWebSearch } from "@/lib/shouldUseWebSearch";
-import {
-  runDeepResearchTool,
-  shouldDelegateToDeepResearch,
-} from "@/lib/research/deepResearchTool";
 import type { WebSource } from "@/lib/search/webSearchClient";
 
 import {
@@ -426,8 +422,10 @@ export async function runChatStreamTurn(opts: RunChatStreamTurnOptions): Promise
   const lastUserText = (userMsg?.content || "").toString();
   // Deep Research mode always uses the agent; in normal chat the main agent
   // delegates to it as a tool whenever the request is a real research task.
-  const isDeepResearch =
-    chatMode === "deep-research" || (chatMode === "normal" && shouldDelegateToDeepResearch(lastUserText));
+  // Normal chat stays on the fast chat path. Deep Research is entered only
+  // when the user explicitly selects that service; this also keeps its large
+  // agent module out of the first-send bundle.
+  const isDeepResearch = chatMode === "deep-research";
 
   // Short conversation context so follow-up research questions resolve.
   const researchContext = messages
@@ -445,6 +443,7 @@ export async function runChatStreamTurn(opts: RunChatStreamTurnOptions): Promise
         onStatus: (status: string) => void;
         signal?: AbortSignal;
       }) => {
+        const { runDeepResearchTool } = await import("@/lib/research/deepResearchTool");
         await runDeepResearchTool({
           query: lastUserText,
           context: researchContext,
