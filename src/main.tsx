@@ -47,6 +47,16 @@ import "./styles/chat-legibility.css";
 import "./styles/mobile-sunset-buttons.css";
 // Light (white + pink) theme layer — must load after every legacy dark sheet.
 import "./styles/light-theme.css";
+// Device-tier layer — must load last so it can strip expensive decorative
+// effects (blur, infinite animations) on weak devices without any other sheet
+// re-adding them afterwards.
+import "./styles/perf-tier.css";
+import { applyPerfTier } from "@/lib/deviceCapability";
+
+// Classify the device before React mounts so the first painted frame already
+// uses the cheap variant on low-end hardware (no visible downgrade flash).
+applyPerfTier();
+
 // All fonts are loaded via Google Fonts <link> in index.html (Space Grotesk,
 // DM Sans, Work Sans, Inter, Instrument Serif, Noto Serif Arabic, Cairo,
 // Tajawal, Readex Pro). @fontsource imports were duplicating those payloads
