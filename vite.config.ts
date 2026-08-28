@@ -880,12 +880,19 @@ export default defineConfig({
     assetsInlineLimit: 2048,
     chunkSizeWarningLimit: 1200,
     minify: "esbuild",
-    // Fully disable modulepreload. Vite's default behavior preloads the
-    // transitive graph of every async chunk from the entry, which meant the
-    // landing page eagerly fetched ~1MB of markdown/syntax/icons/chat code
-    // even though those chunks are only used inside authenticated routes.
-    // Each lazy route now fetches its own chunks strictly on demand.
-    modulePreload: false,
+    // Vite's default modulepreload preloads the transitive graph of every async
+    // chunk reachable from the entry, which made the landing page eagerly fetch
+    // ~1MB of markdown/syntax/icons/chat code. Fully disabling it fixed that but
+    // created a request waterfall instead: the browser could only discover the
+    // React runtime AFTER downloading + parsing the entry chunk. Allow-list just
+    // the shell chunks so they download in parallel with the entry, and nothing
+    // route-specific is preloaded.
+    modulePreload: {
+      polyfill: false,
+      resolveDependencies: (_file, deps) =>
+        deps.filter((dep) => /(^|\/)(react-vendor|supabase)-[^/]+\.js$/.test(dep)),
+    },
+
     rollupOptions: {
       external: [/^npm:/, /^https?:\/\//, /^jsr:/, /^node:/],
       output: {
