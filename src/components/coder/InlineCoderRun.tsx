@@ -151,7 +151,9 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
   const [assetPhase, setAssetPhase] = useState<"idle" | "running" | "done">("idle");
   const [tab, setTab] = useState<"plan" | "files" | "assets" | "logs" | "notes">("plan");
 
-  const [collapsed, setCollapsed] = useState(false);
+  // Collapsed by default: the build reads as a normal chat turn, and the
+  // files/terminal detail is one tap away for anyone who wants it.
+  const [collapsed, setCollapsed] = useState(true);
   const [publishing, setPublishing] = useState(false);
   const [publishedId, setPublishedId] = useState<string | null>(null);
   const [canvasOpen, setCanvasOpen] = useState(false);
@@ -595,21 +597,18 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
 
 
   return (
-    <div className="theme-fixed coder-fixed my-4 w-full rounded-2xl border border-foreground/10 bg-neutral-950/80 shadow-lg overflow-hidden">
-      {/* Header */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-foreground/10 px-4 py-2.5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+    <div className="my-3 w-full">
+      {/* Quiet status row — reads like part of the conversation, not a product panel. */}
+      <div className="flex flex-wrap items-center gap-2 pb-1">
+        <div className="flex items-center gap-2 min-w-[140px] flex-1">
           {status === "running" ? (
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-foreground/60" />
           ) : status === "done" ? (
-            <Check className="h-4 w-4 text-emerald-500" />
+            <Check className="h-3.5 w-3.5 shrink-0 text-emerald-500" />
           ) : (
-            <X className="h-4 w-4 text-destructive" />
+            <X className="h-3.5 w-3.5 shrink-0 text-destructive" />
           )}
-        </div>
-        <div className="min-w-[140px] flex-1">
-          <div className="truncate text-sm font-semibold text-foreground">Megsy Coder</div>
-          <div className="truncate text-[11px] text-foreground/60">
+          <div className="truncate text-[13px] text-foreground/70">
             {status === "running"
               ? runningLabel
               : status === "done"
@@ -617,6 +616,7 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
                 : `Error: ${error}`}
           </div>
         </div>
+
         {status === "done" && todos.length > 0 && todos.some((t) => !t.done) && (
           <Button
             size="sm"
@@ -710,7 +710,7 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
       </div>
 
       {collapsed ? null : (
-        <>
+        <div className="theme-fixed coder-fixed overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.02]">
           {/* Integration prompts */}
           {integrations.length > 0 && (
             <div className="flex flex-wrap gap-2 border-b border-foreground/10 p-3">
@@ -963,7 +963,8 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
               </div>
             )}
           </div>
-        </>
+        </div>
+
       )}
       <Suspense fallback={null}>
         {canvasOpen && (

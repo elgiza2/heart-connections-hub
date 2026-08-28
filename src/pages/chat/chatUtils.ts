@@ -1,16 +1,41 @@
 // Pure utilities extracted from ChatPage.tsx for reduced bundle/HMR cost.
 // No React state or side effects — safe to memoize and tree-shake.
 
+// Tool names that must never surface as raw text/JSON in the chat body.
+const LEAKED_ACTION_NAMES =
+  "generate_image|generate_video|generate_music|generate_voice|edit_image|create_image|image_generation|video_generation|deep_research|web_search|browse_website";
+
 export const stripLeakedToolText = (value: string) =>
   String(value || "")
     .replace(
       /```(?:tool_code|tool_call|function_call|python)?[\s\S]*?(?:default_api|tool_code|tool_call|function_call)[\s\S]*?(?:```|$)/gi,
       "",
     )
+    // Fenced JSON action blocks, e.g. ```json { "action": "generate_image", ... } ```
+    .replace(
+      new RegExp(
+        "```(?:json|jsonc|javascript|js)?\\s*\\{[\\s\\S]*?\"(?:action|tool|tool_name|name|function)\"\\s*:\\s*\"(?:" +
+          LEAKED_ACTION_NAMES +
+          ")\"[\\s\\S]*?(?:```|$)",
+        "gi",
+      ),
+      "",
+    )
+    // Bare JSON action objects printed straight into the message body.
+    .replace(
+      new RegExp(
+        "\\{[^{}]*\"(?:action|tool|tool_name|name|function)\"\\s*:\\s*\"(?:" +
+          LEAKED_ACTION_NAMES +
+          ")\"[\\s\\S]*?(?:\\}\\s*\\}|\\})",
+        "gi",
+      ),
+      "",
+    )
     .replace(/<tool_call[\s\S]*?(?:<\/tool_call>|$)/gi, "")
     .replace(/<function_call[\s\S]*?(?:<\/function_call>|$)/gi, "")
     .replace(/\$\{tool_code\}\s*/gi, "")
     .replace(/(?:^|\n)[^\n]*(?:print\s*\(\s*)?default_api\.[^\n]*(?:\n|$)/gi, "\n");
+
 
 export const sanitizeLeakedToolText = (value: string) => stripLeakedToolText(value).trim();
 
@@ -27,6 +52,9 @@ export const makeLeakedToolStreamSanitizer = () => {
     "```tool_call",
     "```function_call",
     "```python",
+    "```json",
+    '{"action"',
+    '{ "action"',
   ];
   return (chunk: string, force = false) => {
     buffer += chunk;

@@ -131,23 +131,20 @@ export default function CoderProjectCard({ files: initialFiles, summary, project
 
 
   return (
-    <div className="my-3 w-full rounded-2xl border border-foreground/10 bg-gradient-to-br from-neutral-950/90 to-neutral-900/80 shadow-lg overflow-hidden">
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-foreground/10">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15">
-          <Sparkles className="h-4.5 w-4.5 text-primary" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="text-sm font-semibold text-foreground">Megsy Coder project</div>
-          <div className="text-[11px] text-foreground/60">{files.length} files</div>
+    <div className="my-3 w-full">
+      <div className="flex items-center gap-2 pb-1">
+        <Sparkles className="h-3.5 w-3.5 shrink-0 text-foreground/55" />
+        <div className="truncate text-[13px] text-foreground/70">
+          Project · {files.length} files
         </div>
       </div>
 
       {fileNames.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 px-4 py-3 border-b border-foreground/10">
+        <div className="flex flex-wrap gap-1.5 pb-2">
           {fileNames.map((p) => (
             <span
               key={p}
-              className="inline-flex items-center gap-1 rounded-md bg-foreground/5 px-2 py-1 text-[11px] font-mono text-foreground/70 border border-foreground/5"
+              className="inline-flex items-center gap-1 rounded-md border border-foreground/10 bg-foreground/[0.04] px-2 py-1 text-[11px] font-mono text-foreground/70"
             >
               <FileCode className="h-3 w-3 text-foreground/65" />
               {p}
@@ -159,7 +156,8 @@ export default function CoderProjectCard({ files: initialFiles, summary, project
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2 px-4 py-3">
+
+      <div className="flex flex-wrap gap-2">
         <Button size="sm" onClick={() => setCanvasOpen(true)} className="h-8 text-xs">
           <Eye className="h-3.5 w-3.5 mr-1" /> Preview
         </Button>
