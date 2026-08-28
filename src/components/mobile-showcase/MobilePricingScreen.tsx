@@ -10,7 +10,6 @@ import {
   Bot,
   Search,
   Infinity as InfinityIcon,
-  Sparkles,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -356,7 +355,7 @@ export default function MobilePricingScreen({
             paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
           }}
         >
-          <p className="mb-3 text-center text-[11px] leading-[1.5]" style={{ color: c.faint }}>
+          <p className="mb-3 min-h-[33px] text-center text-[11px] leading-[1.5]" style={{ color: c.faint }}>
             {t.fine}
           </p>
           <button
