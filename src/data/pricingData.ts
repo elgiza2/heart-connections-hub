@@ -104,7 +104,7 @@ const yearlyIntro = (savings: number, bonus: number) => [
 export const PLANS: PlanCardConfig[] = [
   {
     tier: "pro",
-    name: "Pro",
+    name: "Megsy Pro",
     label: "",
     bg: "linear-gradient(165deg, #1e64ff 0%, #2563eb 55%, #1d4fd8 100%)",
     text: "#ffffff",

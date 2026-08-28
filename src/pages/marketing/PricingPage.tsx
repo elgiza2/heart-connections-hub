@@ -775,18 +775,8 @@ const PricingPage = () => {
         >
           <div className="mx-auto mb-8 flex h-[170px] w-full max-w-[520px] items-center justify-center sm:h-[200px]">
             <PlanCard
-              plan="starter"
-              className="-mr-6 h-[104px] w-[152px] shrink-0 sm:h-[124px] sm:w-[182px]"
-              style={{ transform: "rotate(-12deg) translateY(4px)" }}
-            />
-            <PlanCard
               plan="pro"
               className="z-10 h-[120px] w-[176px] shrink-0 sm:h-[142px] sm:w-[208px]"
-            />
-            <PlanCard
-              plan="elite"
-              className="-ml-6 h-[104px] w-[152px] shrink-0 sm:h-[124px] sm:w-[182px]"
-              style={{ transform: "rotate(12deg) translateY(4px)" }}
             />
           </div>
 
@@ -794,7 +784,7 @@ const PricingPage = () => {
             className="font-garamond text-foreground"
             style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1.1 }}
           >
-            The Plans
+            Megsy Pro
           </h2>
           <p
             className="mt-3 text-foreground/85 text-xs sm:text-sm uppercase font-light"
@@ -848,8 +838,8 @@ const PricingPage = () => {
         </motion.div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {PLANS.map((p, i) => {
+        <div className="mx-auto grid max-w-xl grid-cols-1 gap-6 items-stretch">
+          {PLANS.filter((p) => p.tier === "pro").map((p, i) => {
             // Single source of truth: intro price monthly, 2-months-free yearly.
             const {
               price,
