@@ -215,7 +215,6 @@ export default function MobilePricingScreen({
                 <span className="text-[14.5px] leading-snug" style={{ color: c.text }}>
                   {text}
                 </span>
-                {i === features.length - 1 ? null : null}
               </li>
             ))}
           </ul>
