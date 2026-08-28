@@ -28,6 +28,19 @@ function MegsyFeatureIcon({ className, style }: { className?: string; style?: Re
   return <MegsyStar className={className ?? "h-5 w-5"} />;
 }
 
+function useCompactHeight() {
+  const [compact, setCompact] = useState(
+    typeof window !== "undefined" && window.innerHeight < 780,
+  );
+  useEffect(() => {
+    const update = () => setCompact(window.innerHeight < 780);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return compact;
+}
+
 function useIsLightTheme() {
   const [light, setLight] = useState(
     typeof document !== "undefined" &&
