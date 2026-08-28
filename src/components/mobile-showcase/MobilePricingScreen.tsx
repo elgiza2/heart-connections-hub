@@ -1,6 +1,7 @@
-/** @doc Mobile /pricing — Manus-style minimal upgrade sheet.
- *  Single plan (Megsy Pro): sparkle mark · serif title · white feature card
- *  with icon rows · two billing option cards · fine print · CTA · legal links.
+/** @doc Mobile /pricing — Manus-style minimal upgrade sheet (pixel-matched to reference).
+ *  Single plan (Megsy Pro): dotted backdrop · sparkle mark · big serif title ·
+ *  airy white feature card · two rounded billing cards with radios · fine print ·
+ *  solid CTA · legal links.
  */
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -16,6 +17,7 @@ import { Link } from "react-router-dom";
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
 import { getDisplayPrice, getPlan, type PlanTier } from "@/data/pricingData";
+
 function useIsLightTheme() {
   const [light, setLight] = useState(
     typeof document !== "undefined" &&
@@ -81,8 +83,8 @@ export default function MobilePricingScreen({
         yearly: "سنوياً",
         introBadge: "خصم 65% على الشهر الأول",
         yearlyBadge: "4 أشهر مجاناً",
-        perMonth: "/شهر",
-        perYear: "/سنة",
+        perMonth: "ج.م. / شهر",
+        perYear: "ج.م. / سنة",
         fine: "$7.00 للشهر الأول، ثم $20.00/شهر. يمكنك الإلغاء في أي وقت.",
         cta: "قم بالترقية الآن",
         terms: "الشروط",
@@ -95,8 +97,8 @@ export default function MobilePricingScreen({
         yearly: "Yearly",
         introBadge: "65% off the first month",
         yearlyBadge: "4 months free",
-        perMonth: "/mo",
-        perYear: "/yr",
+        perMonth: "/month",
+        perYear: "/year",
         fine: "$7.00 for the first month, then $20.00/month. Cancel anytime.",
         cta: "Upgrade now",
         terms: "Terms",
@@ -110,32 +112,38 @@ export default function MobilePricingScreen({
 
   const c = isLight
     ? {
+        bg: "#f2f2f2",
+        dot: "rgba(0,0,0,0.10)",
         text: "#0a0a0a",
         muted: "#6b7280",
         faint: "#9ca3af",
         card: "#ffffff",
-        cardBorder: "rgba(0,0,0,0.08)",
-        cardShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08)",
+        cardBorder: "rgba(0,0,0,0.06)",
+        cardShadow: "0 1px 2px rgba(0,0,0,0.03), 0 12px 32px -16px rgba(0,0,0,0.10)",
         selBorder: "#0a0a0a",
-        selBg: "rgba(0,0,0,0.025)",
         unselBorder: "rgba(0,0,0,0.10)",
         badgeBg: "#e8f1ff",
         badgeText: "#1d4ed8",
-        icon: "#3f3f46",
+        icon: "#1f2937",
+        ctaBg: "#0a0a0a",
+        ctaFg: "#ffffff",
       }
     : {
+        bg: "#0b0b0c",
+        dot: "rgba(255,255,255,0.08)",
         text: "#f5f5f5",
         muted: "#a3a3a3",
         faint: "#737373",
         card: "rgba(255,255,255,0.05)",
-        cardBorder: "rgba(255,255,255,0.10)",
-        cardShadow: "0 1px 2px rgba(0,0,0,0.25), 0 8px 24px -12px rgba(0,0,0,0.4)",
+        cardBorder: "rgba(255,255,255,0.09)",
+        cardShadow: "0 1px 2px rgba(0,0,0,0.25), 0 12px 32px -16px rgba(0,0,0,0.5)",
         selBorder: "#f5f5f5",
-        selBg: "rgba(255,255,255,0.06)",
         unselBorder: "rgba(255,255,255,0.14)",
         badgeBg: "rgba(96,165,250,0.16)",
         badgeText: "#93c5fd",
-        icon: "#d4d4d8",
+        icon: "#e4e4e7",
+        ctaBg: "#f5f5f5",
+        ctaFg: "#0a0a0a",
       };
 
   const options = [
@@ -160,12 +168,24 @@ export default function MobilePricingScreen({
   return (
     <div
       dir={isAr ? "rtl" : "ltr"}
-      className="relative flex h-[100dvh] w-full flex-col overflow-y-auto bg-background"
+      className="relative flex h-[100dvh] w-full flex-col overflow-y-auto"
       style={{
+        background: c.bg,
         color: c.text,
         fontFamily: 'Inter, -apple-system, "SF Pro Text", system-ui, sans-serif',
       }}
     >
+      {/* Dotted backdrop texture */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: `radial-gradient(${c.dot} 1px, transparent 1px)`,
+          backgroundSize: "18px 18px",
+          maskImage: "radial-gradient(120% 90% at 50% 0%, black 30%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(120% 90% at 50% 0%, black 30%, transparent 100%)",
+        }}
+      />
       <style>{`
         @keyframes mps-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
         .mps-rise { animation: mps-rise .5s cubic-bezier(.22,.61,.36,1) both; }
@@ -174,7 +194,7 @@ export default function MobilePricingScreen({
 
       {/* Header */}
       <header
-        className="relative shrink-0 px-4"
+        className="relative z-10 shrink-0 px-4"
         style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 2px)" }}
       >
         <MobileSidebarButton
@@ -184,15 +204,15 @@ export default function MobilePricingScreen({
         />
       </header>
 
-      <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
+      <div className="relative z-10 mx-auto flex w-full max-w-[380px] flex-1 flex-col px-5">
         {/* Sparkle mark */}
-        <div className="mps-rise mt-3 flex justify-center" style={{ animationDelay: "10ms" }}>
-          <Sparkles className="h-6 w-6" strokeWidth={1.5} style={{ color: c.text }} fill="currentColor" />
+        <div className="mps-rise mt-10 flex justify-center" style={{ animationDelay: "10ms" }}>
+          <Sparkles className="h-8 w-8" strokeWidth={1.25} style={{ color: c.text }} fill="currentColor" />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-3 text-center text-[23px] font-normal leading-[1.15] tracking-[-0.01em]"
+          className="mps-rise mt-4 text-center text-[28px] font-normal leading-[1.2] tracking-[-0.01em]"
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
@@ -200,7 +220,7 @@ export default function MobilePricingScreen({
 
         {/* Feature card */}
         <div
-          className="mps-rise mt-4 rounded-2xl px-4 py-3.5"
+          className="mps-rise mt-6 rounded-[24px] px-5 py-6"
           style={{
             animationDelay: "120ms",
             background: c.card,
@@ -208,11 +228,11 @@ export default function MobilePricingScreen({
             boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-2.5">
-            {features.map(({ icon: Icon, text }, i) => (
-              <li key={text} className="flex items-center gap-3">
-                <Icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.6} style={{ color: c.icon }} />
-                <span className="text-[13px] leading-snug" style={{ color: c.text }}>
+          <ul className="flex flex-col gap-4">
+            {features.map(({ icon: Icon, text }) => (
+              <li key={text} className="flex items-center gap-3.5">
+                <Icon className="h-[20px] w-[20px] shrink-0" strokeWidth={1.4} style={{ color: c.icon }} />
+                <span className="text-[14px] leading-snug" style={{ color: c.text }}>
                   {text}
                 </span>
               </li>
@@ -221,7 +241,7 @@ export default function MobilePricingScreen({
         </div>
 
         {/* Billing options */}
-        <div className="mps-rise mt-4 flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
+        <div className="mps-rise mt-6 flex flex-col gap-3" style={{ animationDelay: "200ms" }}>
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -229,39 +249,41 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-start transition-all duration-200"
+                className="flex w-full items-center gap-4 rounded-[22px] px-5 py-4 text-start transition-all duration-200"
                 style={{
-                  background: selected ? c.selBg : c.card,
-                  border: `${selected ? "1.5px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
+                  background: c.card,
+                  border: `${selected ? "2px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
                   boxShadow: selected ? c.cardShadow : "none",
                 }}
               >
                 <span
-                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
-                  style={{ border: `1.5px solid ${selected ? c.text : c.faint}` }}
+                  className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  style={{ border: `2px solid ${selected ? c.text : c.faint}` }}
                 >
-                  {selected && <span className="h-[9px] w-[9px] rounded-full" style={{ background: c.text }} />}
+                  {selected && <span className="h-[11px] w-[11px] rounded-full" style={{ background: c.text }} />}
                 </span>
-                <span className="flex flex-1 flex-col gap-0.5">
-                  <span className="flex items-center gap-2">
-                    <span className="text-[13px] font-medium" style={{ color: c.text }}>
+                <span className="flex flex-1 flex-col gap-1">
+                  <span className="flex items-center justify-end gap-2">
+                    {opt.badge && (
+                      <span
+                        className="rounded-full px-2 py-[3px] text-[11px] font-medium leading-none"
+                        style={{ background: c.badgeBg, color: c.badgeText }}
+                      >
+                        {opt.badge}
+                      </span>
+                    )}
+                    <span className="text-[14px] font-medium" style={{ color: c.text }}>
                       {opt.label}
                     </span>
-                    <span
-                      className="rounded-full px-1.5 py-[2px] text-[10px] font-medium leading-none"
-                      style={{ background: c.badgeBg, color: c.badgeText }}
-                    >
-                      {opt.badge}
-                    </span>
                   </span>
-                  <span className="flex items-baseline gap-1.5 tabular-nums" dir="ltr">
-                    <span className="text-[15px] font-semibold" style={{ color: c.text }}>
+                  <span className="flex items-baseline justify-end gap-1.5 tabular-nums">
+                    <span className="text-[17px] font-semibold" style={{ color: c.text }}>
                       ${opt.price}
                     </span>
-                    <span className="text-[11.5px]" style={{ color: c.muted }}>
+                    <span className="text-[12px]" style={{ color: c.muted }}>
                       {opt.unit}
                     </span>
-                    <span className="text-[12px] line-through" style={{ color: c.faint }}>
+                    <span className="text-[13px] line-through" style={{ color: c.faint }}>
                       ${opt.strike}
                     </span>
                   </span>
@@ -273,7 +295,7 @@ export default function MobilePricingScreen({
 
         {/* Fine print */}
         <p
-          className="mps-rise mt-3 text-center text-[11px] leading-relaxed"
+          className="mps-rise mt-4 text-center text-[11.5px] leading-relaxed"
           style={{ animationDelay: "260ms", color: c.faint }}
         >
           {t.fine}
@@ -281,18 +303,18 @@ export default function MobilePricingScreen({
 
         {/* CTA */}
         <div
-          className="mps-rise mt-auto pt-3"
+          className="mps-rise mt-auto pt-4"
           style={{
             animationDelay: "320ms",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)",
           }}
         >
           <button
             type="button"
-            data-sunset="true"
             onClick={() => onSubscribe("pro")}
             disabled={isLoading}
-            className="btn-sunset flex h-[46px] w-full items-center justify-center rounded-xl px-6 text-[14.5px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            className="flex h-[52px] w-full items-center justify-center rounded-2xl px-6 text-[15px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            style={{ background: c.ctaBg, color: c.ctaFg }}
           >
             {isLoading ? (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/30 border-t-current" />
@@ -301,22 +323,19 @@ export default function MobilePricingScreen({
             )}
           </button>
           <nav
-            className="mt-2.5 flex items-center justify-center text-[11.5px] leading-none"
+            className="mt-3.5 flex items-center justify-center gap-8 text-[12px] leading-none"
             style={{ color: c.faint }}
             aria-label="Legal"
           >
-            {([
-              { to: "/terms", label: t.terms },
-              { to: "/privacy", label: t.privacy },
-              { to: "/restore", label: t.restore },
-            ] as const).map((item, i) => (
-              <span key={item.to} className="flex items-center">
-                {i > 0 && <span aria-hidden className="mx-3 h-[10px] w-px" style={{ background: c.unselBorder }} />}
-                <Link to={item.to} className="px-1 py-1 transition-opacity hover:opacity-100" style={{ color: c.faint }}>
-                  {item.label}
-                </Link>
-              </span>
-            ))}
+            <Link to="/terms" className="px-1 py-1 transition-opacity hover:opacity-70" style={{ color: c.faint }}>
+              {t.terms}
+            </Link>
+            <Link to="/privacy" className="px-1 py-1 transition-opacity hover:opacity-70" style={{ color: c.faint }}>
+              {t.privacy}
+            </Link>
+            <Link to="/restore" className="px-1 py-1 transition-opacity hover:opacity-70" style={{ color: c.faint }}>
+              {t.restore}
+            </Link>
           </nav>
         </div>
       </div>
