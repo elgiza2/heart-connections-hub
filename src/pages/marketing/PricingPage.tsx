@@ -30,6 +30,7 @@ import {
   getPlan,
   type PlanTier,
 } from "@/data/pricingData";
+import { markCheckoutOpened } from "@/lib/pricingOffers";
 
 import { brandText, getZoneBrand } from "@/lib/zoneBrand";
 import { isEgMode } from "@/lib/egMode";
