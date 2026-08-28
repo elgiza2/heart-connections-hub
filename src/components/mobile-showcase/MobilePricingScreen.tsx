@@ -75,6 +75,7 @@ export default function MobilePricingScreen({
   const lang = useUserLang();
   const isAr = lang === "ar";
   const isLight = useIsLightTheme();
+  const compact = useCompactHeight();
   const isLoading = loadingTier === "pro";
 
   // Always exactly 6 rows so the card height (and the CTA position) never
@@ -256,15 +257,17 @@ export default function MobilePricingScreen({
       <div className="relative z-10 mx-auto flex w-full max-w-[400px] flex-1 flex-col px-5">
         {/* Megsy star mark */}
         <div
-          className="mps-rise mt-[5%] flex justify-center"
+          className={`mps-rise flex justify-center ${compact ? "mt-[2%]" : "mt-[4%]"}`}
           style={{ animationDelay: "10ms", color: c.text }}
         >
-          <MegsyStar className="h-9 w-9" />
+          <MegsyStar className={compact ? "h-7 w-7" : "h-8 w-8"} />
         </div>
 
         {/* Title */}
         <h1
-          className="mps-rise mt-3 text-center text-[27px] font-normal leading-[1.2] tracking-[-0.015em]"
+          className={`mps-rise text-center font-normal leading-[1.2] tracking-[-0.015em] ${
+            compact ? "mt-2 text-[22px]" : "mt-2.5 text-[25px]"
+          }`}
           style={{ animationDelay: "60ms", fontFamily: '"Instrument Serif", Georgia, serif' }}
         >
           {t.title}
@@ -272,7 +275,9 @@ export default function MobilePricingScreen({
 
         {/* Feature card — single column, airy rows like the reference */}
         <div
-          className="mps-rise mt-6 rounded-[26px] px-5 py-5"
+          className={`mps-rise rounded-[24px] ${
+            compact ? "mt-3.5 px-4 py-3.5" : "mt-5 px-5 py-4"
+          }`}
           style={{
             animationDelay: "120ms",
             background: c.card,
@@ -280,15 +285,19 @@ export default function MobilePricingScreen({
             boxShadow: c.cardShadow,
           }}
         >
-          <ul className="flex flex-col gap-[17px]">
+          <ul className={`flex flex-col ${compact ? "gap-[11px]" : "gap-[14px]"}`}>
             {features.map(({ icon: Icon, text }) => (
               <li
                 key={text}
-                className={`flex items-center gap-3.5 ${isAr ? "flex-row-reverse text-right" : ""}`}
+                className={`flex items-center gap-3 ${isAr ? "flex-row-reverse text-right" : ""}`}
               >
-                <Icon className="h-[21px] w-[21px] shrink-0" strokeWidth={1.5} style={{ color: c.icon }} />
+                <Icon
+                  className={`${compact ? "h-[18px] w-[18px]" : "h-[20px] w-[20px]"} shrink-0`}
+                  strokeWidth={1.5}
+                  style={{ color: c.icon }}
+                />
                 <span
-                  className="flex-1 text-[14.5px] leading-[1.35]"
+                  className={`flex-1 leading-[1.35] ${compact ? "text-[13px]" : "text-[14px]"}`}
                   style={{ color: c.text }}
                 >
                   {text}
@@ -299,10 +308,13 @@ export default function MobilePricingScreen({
         </div>
 
         {/* Breathing room, exactly like the reference */}
-        <div className="flex-1 min-h-[16px]" />
+        <div className="flex-1 min-h-[12px]" />
 
         {/* Billing options */}
-        <div className="mps-rise flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
+        <div
+          className={`mps-rise flex flex-col ${compact ? "gap-2" : "gap-2.5"}`}
+          style={{ animationDelay: "200ms" }}
+        >
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -310,7 +322,9 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className={`flex w-full items-center gap-3.5 rounded-[20px] px-4 py-3 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
+                className={`flex w-full items-center gap-3 rounded-[18px] px-4 text-start transition-all duration-200 ${
+                  compact ? "py-2" : "py-2.5"
+                } ${isAr ? "flex-row-reverse" : ""}`}
                 style={{
                   background: c.card,
                   border: `${selected ? "2px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
@@ -318,23 +332,23 @@ export default function MobilePricingScreen({
                 }}
               >
                 <span
-                  className="flex h-[19px] w-[19px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `2px solid ${selected ? c.text : c.faint}` }}
                 >
                   {selected && (
-                    <span className="h-[9px] w-[9px] rounded-full" style={{ background: c.text }} />
+                    <span className="h-[8px] w-[8px] rounded-full" style={{ background: c.text }} />
                   )}
                 </span>
-                <span className="flex flex-1 flex-col gap-1">
+                <span className="flex flex-1 flex-col gap-[3px]">
                   <span
                     className={`flex items-center gap-2 ${isAr ? "flex-row-reverse" : ""} justify-start`}
                   >
-                    <span className="text-[13px] font-medium" style={{ color: c.muted }}>
+                    <span className="text-[12.5px] font-medium" style={{ color: c.muted }}>
                       {opt.label}
                     </span>
                     {opt.badge && (
                       <span
-                        className="rounded-full px-2 py-[3px] text-[10.5px] font-medium leading-none"
+                        className="rounded-full px-2 py-[2.5px] text-[10px] font-medium leading-none"
                         style={{ background: c.badgeBg, color: c.badgeText }}
                       >
                         {opt.badge}
@@ -344,7 +358,7 @@ export default function MobilePricingScreen({
                   <span
                     className={`flex items-baseline gap-2 tabular-nums ${isAr ? "flex-row-reverse" : ""} justify-start`}
                   >
-                    <span className="text-[16.5px] font-semibold" style={{ color: c.text }}>
+                    <span className={`${compact ? "text-[15px]" : "text-[16px]"} font-semibold`} style={{ color: c.text }}>
                       ${opt.price}
                     </span>
                     <span className="text-[11px]" style={{ color: c.muted }}>
@@ -362,20 +376,25 @@ export default function MobilePricingScreen({
 
         {/* Fine print + CTA + legal, pinned to the very bottom */}
         <div
-          className="mps-rise pt-3.5"
+          className={`mps-rise shrink-0 ${compact ? "pt-2" : "pt-3"}`}
           style={{
             animationDelay: "300ms",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
           }}
         >
-          <p className="mb-3 min-h-[33px] text-center text-[11px] leading-[1.5]" style={{ color: c.faint }}>
+          <p
+            className={`text-center leading-[1.45] ${compact ? "mb-2 min-h-[26px] text-[10px]" : "mb-2.5 min-h-[30px] text-[10.5px]"}`}
+            style={{ color: c.faint }}
+          >
             {t.fine}
           </p>
           <button
             type="button"
             onClick={() => onSubscribe("pro")}
             disabled={isLoading}
-            className="flex h-[52px] w-full items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            className={`flex w-full items-center justify-center rounded-[16px] px-6 font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60 ${
+              compact ? "h-[46px] text-[14px]" : "h-[50px] text-[15px]"
+            }`}
             style={{ background: c.ctaBg, color: c.ctaFg }}
           >
             {isLoading ? (
@@ -385,7 +404,7 @@ export default function MobilePricingScreen({
             )}
           </button>
           <nav
-            className="mt-3.5 flex items-center justify-center gap-7 text-[12px] leading-none"
+            className={`flex items-center justify-center gap-6 leading-none ${compact ? "mt-2 text-[11px]" : "mt-3 text-[11.5px]"}`}
             style={{ color: c.faint }}
             aria-label="Legal"
           >
