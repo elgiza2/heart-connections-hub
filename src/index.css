@@ -3749,6 +3749,7 @@ select,
   -webkit-text-fill-color: hsl(var(--sunset-foreground));
   font-weight: 600;
   letter-spacing: 0;
+  text-shadow: 0 1px 2px hsl(0 0% 0% / 0.28);
   box-shadow:
     inset 0 1px 0 hsl(0 0% 100% / 0.35),
     inset 0 0 0 1px hsl(0 0% 100% / 0.16),
@@ -3777,10 +3778,11 @@ select,
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(180deg, hsl(0 0% 100% / 0.28) 0%, hsl(0 0% 100% / 0.06) 42%, hsl(0 0% 0% / 0.06) 100%),
+    linear-gradient(180deg, hsl(0 0% 100% / 0.26) 0%, hsl(0 0% 100% / 0.04) 40%, hsl(0 0% 0% / 0.14) 100%),
+    linear-gradient(0deg, hsl(0 0% 0% / 0.12), hsl(0 0% 0% / 0.12)),
     var(--sunset-grain);
-  background-size: 100% 100%, 180px 100px;
-  background-blend-mode: normal, soft-light;
+  background-size: 100% 100%, 100% 100%, 180px 100px;
+  background-blend-mode: normal, normal, soft-light;
   opacity: 0.9;
 }
 
