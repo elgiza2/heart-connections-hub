@@ -1,4 +1,5 @@
 /** @doc Request a password reset link via email. */
+import { forceDarkTheme } from "@/lib/theme";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { m as motion } from "framer-motion";

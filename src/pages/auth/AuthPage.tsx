@@ -1,4 +1,5 @@
 /** @doc Sign in / sign up — email, Google, Apple and MFA challenge entry. */
+import { forceDarkTheme } from "@/lib/theme";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { m as motion, AnimatePresence } from "framer-motion";
