@@ -30,7 +30,9 @@ import {
   getPlan,
   type PlanTier,
 } from "@/data/pricingData";
-import { markCheckoutOpened } from "@/lib/pricingOffers";
+import { markCheckoutOpened, hasAbandonedCheckout } from "@/lib/pricingOffers";
+import { dodoProductId } from "@/lib/dodoCatalog";
+
 
 import { brandText, getZoneBrand } from "@/lib/zoneBrand";
 import { isEgMode } from "@/lib/egMode";
