@@ -173,18 +173,49 @@
     </svg>
     <div id="root"></div>
 
-    <!-- Speculation Rules API (Chromium 111+): prerender same-origin links on
-         moderate hover intent. Falls back silently on Safari/Firefox. -->
-    <script type="speculationrules">
-      {
-        "prerender": [
-          { "source": "document", "where": { "and": [ { "href_matches": "/*" }, { "not": { "href_matches": "/api/*" } }, { "not": { "href_matches": "/auth/*" } } ] }, "eagerness": "moderate" }
-        ],
-        "prefetch": [
-          { "source": "document", "where": { "href_matches": "/*" }, "eagerness": "conservative" }
-        ]
-      }
+    <!-- Speculation Rules API (Chromium 111+): registered from JS so weak
+         devices, Data Saver and slow networks are skipped entirely — a full
+         prerender is a second page render and it used to run on every hover,
+         which slowed the *current* page down on low-end hardware. Injected
+         after load so it never competes with the first paint. -->
+    <script>
+      (function () {
+        try {
+          if (!HTMLScriptElement.supports?.("speculationrules")) return;
+          var nav = navigator;
+          var c = nav.connection || {};
+          var slow = c.saveData === true || /(^|-)(2g|slow-2g)$/.test(c.effectiveType || "");
+          var weak = (nav.hardwareConcurrency || 8) <= 4 || (nav.deviceMemory || 8) <= 4;
+          if (slow || weak) return;
+          var add = function () {
+            var s = document.createElement("script");
+            s.type = "speculationrules";
+            s.textContent = JSON.stringify({
+              prerender: [
+                {
+                  source: "document",
+                  where: {
+                    and: [
+                      { href_matches: "/*" },
+                      { not: { href_matches: "/api/*" } },
+                      { not: { href_matches: "/auth/*" } },
+                    ],
+                  },
+                  eagerness: "moderate",
+                },
+              ],
+              prefetch: [
+                { source: "document", where: { href_matches: "/*" }, eagerness: "conservative" },
+              ],
+            });
+            document.body.appendChild(s);
+          };
+          if (document.readyState === "complete") setTimeout(add, 1200);
+          else addEventListener("load", function () { setTimeout(add, 1200); });
+        } catch (e) {}
+      })();
     </script>
+
     <script type="module" src="/src/main.tsx"></script>
 
 
