@@ -1,91 +1,81 @@
 /**
- * MediaGenerationSkeleton — placeholder tiles shown while image / video / music
- * results stream in. Gives users an immediate visual cue that generation is
- * underway instead of a bare "typing…" dot.
+ * MediaGenerationSkeleton — the compact status card shown while image / video
+ * results stream in. Intentionally small and quiet: a single rounded row with
+ * the media icon, a live label and a thin indeterminate progress line, so the
+ * chat never jumps around when the finished media replaces it.
  *
- * The component is purely presentational: it derives tile count from the media
- * settings if provided, otherwise falls back to a sensible default per kind.
- * Renders nothing outside the three supported kinds so it's safe to mount
- * unconditionally next to any assistant message.
+ * Motion is skipped on low-end devices and when the user prefers reduced motion.
  */
 
-import { Image as ImageIcon, Film, Music } from "lucide-react";
+import { Image as ImageIcon, Film } from "lucide-react";
+import { isLowEndDevice } from "@/lib/deviceCapability";
 
 type Kind = "images" | "video";
 
 interface MediaGenerationSkeletonProps {
   kind: Kind;
-  /** Optional count override (e.g. 4 image variants). Clamped 1-6. */
+  /** Kept for call-site compatibility; the card is always a single row. */
   count?: number;
   className?: string;
 }
 
-const KIND_META: Record<
-  Kind,
-  { icon: typeof ImageIcon; label: string; aspect: string; tint: string }
-> = {
-  images: {
-    icon: ImageIcon,
-    label: "Generating images…",
-    aspect: "aspect-square",
-    tint: "from-fuchsia-500/10 via-rose-500/5 to-transparent",
-  },
-  video: {
-    icon: Film,
-    label: "Generating video…",
-    aspect: "aspect-video",
-    tint: "from-cyan-500/10 via-sky-500/5 to-transparent",
-  },
+const KIND_META: Record<Kind, { icon: typeof ImageIcon; label: string }> = {
+  images: { icon: ImageIcon, label: "Creating image" },
+  video: { icon: Film, label: "Creating video" },
 };
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function MediaGenerationSkeleton({
   kind,
-  count,
   className = "",
 }: MediaGenerationSkeletonProps) {
   const meta = KIND_META[kind];
   if (!meta) return null;
 
-  // Always a single clean loading tile — the finished media renders in its place.
-  const tileCount = 1;
   const Icon = meta.icon;
+  const still = isLowEndDevice() || prefersReducedMotion();
 
   return (
     <div
-      className={`mb-3 w-full max-w-[42rem] ${className}`}
+      className={`mb-3 w-full max-w-[20rem] ${className}`}
       role="status"
       aria-live="polite"
       aria-label={meta.label}
     >
-      <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-        <Icon className="h-3.5 w-3.5 animate-pulse" />
-        <span>{meta.label}</span>
-      </div>
-      <div
-        className={`grid gap-2 ${tileCount > 1 ? "grid-cols-2" : "grid-cols-1"}`}
-      >
-        {Array.from({ length: tileCount }).map((_, i) => (
-          <div
-            key={i}
-            className={`relative overflow-hidden rounded-xl border border-border/40 bg-muted/40 ${meta.aspect}`}
-          >
+      <div className="flex items-center gap-2.5 rounded-2xl border border-foreground/10 bg-foreground/[0.03] px-3 py-2.5">
+        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-foreground/10 bg-foreground/[0.04]">
+          <Icon
+            className={`h-3.5 w-3.5 text-foreground/70 ${still ? "" : "animate-pulse"}`}
+          />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[13px] font-medium text-foreground/80">
+            {meta.label}
+          </p>
+          <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-full bg-foreground/10">
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${meta.tint}`}
               aria-hidden
-            />
-            <div
-              className="absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent"
-              aria-hidden
+              className={
+                still
+                  ? "h-full w-1/3 rounded-full bg-foreground/35"
+                  : "h-full w-1/3 rounded-full bg-foreground/35 animate-[media-gen-sweep_1.5s_ease-in-out_infinite]"
+              }
             />
           </div>
-        ))}
+        </div>
       </div>
-      <style>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+      {!still && (
+        <style>{`
+          @keyframes media-gen-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300%); }
+          }
+        `}</style>
+      )}
     </div>
   );
 }
