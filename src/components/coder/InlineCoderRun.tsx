@@ -151,7 +151,9 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
   const [assetPhase, setAssetPhase] = useState<"idle" | "running" | "done">("idle");
   const [tab, setTab] = useState<"plan" | "files" | "assets" | "logs" | "notes">("plan");
 
-  const [collapsed, setCollapsed] = useState(false);
+  // Collapsed by default: the build reads as a normal chat turn, and the
+  // files/terminal detail is one tap away for anyone who wants it.
+  const [collapsed, setCollapsed] = useState(true);
   const [publishing, setPublishing] = useState(false);
   const [publishedId, setPublishedId] = useState<string | null>(null);
   const [canvasOpen, setCanvasOpen] = useState(false);
@@ -708,7 +710,7 @@ export default function InlineCoderRun({ runId, prompt, onClose, onFinish, previ
       </div>
 
       {collapsed ? null : (
-        <>
+        <div className="theme-fixed coder-fixed overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.02]">
           {/* Integration prompts */}
           {integrations.length > 0 && (
             <div className="flex flex-wrap gap-2 border-b border-foreground/10 p-3">
