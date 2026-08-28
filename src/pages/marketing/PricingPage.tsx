@@ -377,7 +377,10 @@ const PricingPage = () => {
         }
         throw error;
       }
-      if (data?.url) window.location.href = data.url;
+      if (data?.url) {
+        markCheckoutOpened(interval);
+        window.location.href = data.url;
+      }
       else throw new Error(data?.error || "Checkout failed");
 
     } catch (e: any) {
