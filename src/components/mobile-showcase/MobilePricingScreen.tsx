@@ -376,20 +376,25 @@ export default function MobilePricingScreen({
 
         {/* Fine print + CTA + legal, pinned to the very bottom */}
         <div
-          className="mps-rise pt-3.5"
+          className={`mps-rise shrink-0 ${compact ? "pt-2" : "pt-3"}`}
           style={{
             animationDelay: "300ms",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 8px)",
           }}
         >
-          <p className="mb-3 min-h-[33px] text-center text-[11px] leading-[1.5]" style={{ color: c.faint }}>
+          <p
+            className={`text-center leading-[1.45] ${compact ? "mb-2 min-h-[26px] text-[10px]" : "mb-2.5 min-h-[30px] text-[10.5px]"}`}
+            style={{ color: c.faint }}
+          >
             {t.fine}
           </p>
           <button
             type="button"
             onClick={() => onSubscribe("pro")}
             disabled={isLoading}
-            className="flex h-[52px] w-full items-center justify-center rounded-[18px] px-6 text-[15px] font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60"
+            className={`flex w-full items-center justify-center rounded-[16px] px-6 font-semibold leading-none transition active:scale-[0.99] disabled:opacity-60 ${
+              compact ? "h-[46px] text-[14px]" : "h-[50px] text-[15px]"
+            }`}
             style={{ background: c.ctaBg, color: c.ctaFg }}
           >
             {isLoading ? (
@@ -399,7 +404,7 @@ export default function MobilePricingScreen({
             )}
           </button>
           <nav
-            className="mt-3.5 flex items-center justify-center gap-7 text-[12px] leading-none"
+            className={`flex items-center justify-center gap-6 leading-none ${compact ? "mt-2 text-[11px]" : "mt-3 text-[11.5px]"}`}
             style={{ color: c.faint }}
             aria-label="Legal"
           >
