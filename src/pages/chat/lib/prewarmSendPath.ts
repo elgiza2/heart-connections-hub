@@ -12,16 +12,28 @@ import { runOnIdle } from "@/lib/lazyOnIdle";
  * synchronously in a microtask.
  */
 let warmed = false;
+let warmPromise: Promise<unknown> | null = null;
 
-export function prewarmSendPath(): void {
-  if (warmed || typeof window === "undefined") return;
+const loadSendPath = () => {
+  if (warmPromise) return warmPromise;
+  warmPromise = Promise.all([
+    import("../services/runChatStreamTurn"),
+    import("@/lib/computer/classifyIntent"),
+    import("@/lib/achievements"),
+    import("@/lib/streaks"),
+  ]).catch(() => undefined);
+  return warmPromise;
+};
+
+export function prewarmSendPath(immediate = false): void {
+  if (typeof window === "undefined") return;
+  if (immediate) {
+    void loadSendPath();
+    return;
+  }
+  if (warmed) return;
   warmed = true;
   runOnIdle(() => {
-    void Promise.all([
-      import("@/lib/intentActions"),
-      import("@/lib/intentDetector"),
-      import("@/lib/achievements"),
-      import("@/lib/streaks"),
-    ]).catch(() => undefined);
+    void loadSendPath();
   }, 1500);
 }

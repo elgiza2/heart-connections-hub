@@ -1547,8 +1547,7 @@ const ChatPage = () => {
       // Subscribers-only gate for the Coder builder — uses the single source
       // of truth for paid-plan membership (`intentActions.isPaidPlan`) so
       // gates never drift out of sync across the chat surface.
-      const { isPaidPlan: isPaidPlanHelper } = await import("@/lib/intentActions");
-      if (!isPaidPlanHelper(userPlan)) {
+      if (!isPaidUser(userPlan)) {
 
         if (!chatUserId) {
           toast.error("Sign in and subscribe to use Coder mode.");
@@ -1634,8 +1633,7 @@ const ChatPage = () => {
     // Subscribers-only gate for media generation (images / video). Uses the
     // shared `isPaidPlan` helper so this list stays in one place.
     const SUBSCRIBER_MODES: ChatMode[] = ["video"];
-    const { isPaidPlan: isPaidPlanHelper2 } = await import("@/lib/intentActions");
-    const isPaidPlan = isPaidPlanHelper2(userPlan);
+    const isPaidPlan = isPaidUser(userPlan);
 
 
     // ── No auto-routing in normal chat ───────────────────────────────

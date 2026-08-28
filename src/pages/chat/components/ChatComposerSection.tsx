@@ -6,6 +6,7 @@ import { RemoteAiBusyBanner } from "./RemoteAiBusyBanner";
 import { MentionDropdown } from "./MentionDropdown";
 import { ComposerMobileModeBar } from "./ComposerMobileModeBar";
 import { ComposerAnimatedInput } from "./ComposerAnimatedInput";
+import { prewarmSendPath } from "../lib/prewarmSendPath";
 import ComposerServicePanel from "./ComposerServicePanel";
 import StarterCards, { StarterChips } from "./StarterCards";
 
@@ -172,7 +173,10 @@ export function ChatComposerSection(props: ChatComposerSectionProps) {
                 modesShown={effectiveModesShown}
                 onToggleModes={() => setModesShown((v) => !v)}
                 chatContext
-                onInputFocusChange={setInputFocused}
+                onInputFocusChange={(focused) => {
+                  setInputFocused(focused);
+                  if (focused) prewarmSendPath(true);
+                }}
                 canSendWithoutText={attachedFiles.length > 0}
                 activeServiceHeader={
                   hasHeaderService || attachedFiles.length > 0 ? (
