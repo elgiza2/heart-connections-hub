@@ -99,16 +99,32 @@ export default function MobilePricingScreen({
     return [...head, ...base];
   }, [isAr, isYearly]);
 
+  // Win-back: the user opened checkout, came back without paying.
+  const [winback, setWinback] = useState(false);
+  useEffect(() => {
+    setWinback(hasAbandonedCheckout());
+  }, []);
+
+  const pro = getPlan("pro")!;
+  const monthly = getDisplayPrice(pro, false);
+  const yearly = getDisplayPrice(pro, true);
+
+  const monthlyPrice = winback ? WINBACK_PRICE : monthly.price;
+  const yearlyPrice = winback ? WINBACK_YEARLY_PRICE : yearly.price;
+  const monthlyOff = Math.round((1 - monthlyPrice / pro.monthlyPrice) * 100);
+
   const t = isAr
     ? {
         title: "قم بالترقية إلى Megsy Pro",
         monthly: "شهرياً",
         yearly: "سنوياً",
-        introBadge: "خصم 65% على الشهر الأول",
-        yearlyBadge: "4 أشهر مجاناً",
-        perMonth: "ج.م. / شهر",
-        perYear: "ج.م. / سنة",
-        fine: "$7.00 للشهر الأول، ثم $20.00/شهر. يمكنك الإلغاء في أي وقت.",
+        introBadge: winback ? `عرض خاص لك — $${monthlyPrice}` : `خصم ${monthlyOff}% على الشهر الأول`,
+        yearlyBadge: winback ? "أفضل سعر" : "4 أشهر مجاناً",
+        perMonth: "/ الشهر الأول",
+        perYear: "/ سنة",
+        fine: winback
+          ? `عرض العودة: $${monthlyPrice}.00 للشهر الأول بدلاً من $${INTRO_PRICE}.00، ثم $${pro.monthlyPrice}.00/شهر. يمكنك الإلغاء في أي وقت.`
+          : `$${monthlyPrice}.00 للشهر الأول، ثم $${pro.monthlyPrice}.00/شهر. يمكنك الإلغاء في أي وقت.`,
         cta: "قم بالترقية الآن",
         terms: "الشروط",
         privacy: "الخصوصية",
@@ -118,20 +134,18 @@ export default function MobilePricingScreen({
         title: "Upgrade to Megsy Pro",
         monthly: "Monthly",
         yearly: "Yearly",
-        introBadge: "65% off the first month",
-        yearlyBadge: "4 months free",
-        perMonth: "/month",
+        introBadge: winback ? `Special for you — $${monthlyPrice}` : `${monthlyOff}% off the first month`,
+        yearlyBadge: winback ? "Best price" : "4 months free",
+        perMonth: "/first mo",
         perYear: "/year",
-        fine: "$7.00 for the first month, then $20.00/month. Cancel anytime.",
+        fine: winback
+          ? `Come-back offer: $${monthlyPrice}.00 for your first month instead of $${INTRO_PRICE}.00, then $${pro.monthlyPrice}.00/month. Cancel anytime.`
+          : `$${monthlyPrice}.00 for the first month, then $${pro.monthlyPrice}.00/month. Cancel anytime.`,
         cta: "Upgrade now",
         terms: "Terms",
         privacy: "Privacy",
         restore: "Restore",
       };
-
-  const pro = getPlan("pro")!;
-  const monthly = getDisplayPrice(pro, false);
-  const yearly = getDisplayPrice(pro, true);
 
   const c = isLight
     ? {
