@@ -20,12 +20,13 @@ import {
   Gift,
   Moon,
   Sun,
+  Languages,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useConfirm } from "@/components/common/ConfirmDialog";
 import { useActiveAccount } from "@/hooks/useActiveAccount";
 import { useCredits } from "@/hooks/useCredits";
-import { t as authT, useUserLang } from "@/lib/authI18n";
+import { t as authT, useUserLang, AVAILABLE_LANGS } from "@/lib/authI18n";
 import { goBackOr } from "@/lib/navigation";
 import { getStoredTheme, setTheme, type ThemeMode } from "@/lib/theme";
 
