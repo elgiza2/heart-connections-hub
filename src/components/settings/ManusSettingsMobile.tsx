@@ -107,6 +107,8 @@ const ManusSettingsMobile = () => {
     { icon: UserRound, label: "Account", path: "/settings/profile/edit" },
   ];
 
+  const langLabel = AVAILABLE_LANGS.find((l) => l.code === lang)?.native ?? "English";
+
   const appearanceRows: Row[] = [
     {
       icon: themeMode === "dark" ? Moon : Sun,
@@ -119,7 +121,9 @@ const ManusSettingsMobile = () => {
         setTheme(next);
       },
     },
+    { icon: Languages, label: "Language", trailing: langLabel, path: "/settings/language" },
   ];
+
 
   const linkRows: Row[] = [
     { icon: Heart, label: "Rate this app", external: true, onClick: () => window.open("https://www.trustpilot.com/review/megsyai.com", "_blank", "noopener") },
