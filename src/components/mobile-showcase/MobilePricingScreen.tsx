@@ -18,6 +18,12 @@ import MegsyStar from "@/components/branding/MegsyStar";
 import { MobileSidebarButton } from "@/components/shared/MobileSidebarButton";
 import { useUserLang } from "@/lib/authI18n";
 import { getDisplayPrice, getPlan, type PlanTier } from "@/data/pricingData";
+import {
+  INTRO_PRICE,
+  WINBACK_PRICE,
+  WINBACK_YEARLY_PRICE,
+  hasAbandonedCheckout,
+} from "@/lib/pricingOffers";
 
 function MegsyFeatureIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return <MegsyStar className={className ?? "h-5 w-5"} />;
@@ -188,7 +194,7 @@ export default function MobilePricingScreen({
       yearly: false,
       label: t.monthly,
       badge: t.introBadge,
-      price: monthly.price,
+      price: monthlyPrice,
       strike: monthly.strike,
       unit: t.perMonth,
     },
@@ -196,7 +202,7 @@ export default function MobilePricingScreen({
       yearly: true,
       label: t.yearly,
       badge: t.yearlyBadge,
-      price: yearly.price,
+      price: yearlyPrice,
       strike: yearly.strike,
       unit: t.perYear,
     },
@@ -279,8 +285,8 @@ export default function MobilePricingScreen({
           </ul>
         </div>
 
-        {/* Billing options */}
-        <div className="mps-rise mt-4 flex flex-col gap-2.5" style={{ animationDelay: "200ms" }}>
+        {/* Billing options — pushed to the bottom block, slightly smaller */}
+        <div className="mps-rise mt-auto flex flex-col gap-2" style={{ animationDelay: "200ms" }}>
           {options.map((opt) => {
             const selected = isYearly === opt.yearly;
             return (
@@ -288,7 +294,7 @@ export default function MobilePricingScreen({
                 key={opt.label}
                 type="button"
                 onClick={() => onToggleYearly(opt.yearly)}
-                className={`flex w-full items-center gap-3.5 rounded-[20px] px-4 py-3 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
+                className={`flex w-full items-center gap-3 rounded-[18px] px-3.5 py-2.5 text-start transition-all duration-200 ${isAr ? "flex-row-reverse" : ""}`}
                 style={{
                   background: c.card,
                   border: `${selected ? "2px" : "1px"} solid ${selected ? c.selBorder : c.unselBorder}`,
@@ -296,33 +302,33 @@ export default function MobilePricingScreen({
                 }}
               >
                 <span
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-colors"
+                  className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full transition-colors"
                   style={{ border: `2px solid ${selected ? c.text : c.faint}` }}
                 >
-                  {selected && <span className="h-2.5 w-2.5 rounded-full" style={{ background: c.text }} />}
+                  {selected && <span className="h-2 w-2 rounded-full" style={{ background: c.text }} />}
                 </span>
                 <span className="flex flex-1 flex-col gap-0.5">
                   <span className={`flex items-center gap-2 ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}>
                     {opt.badge && (
                       <span
-                        className="rounded-full px-2 py-[3px] text-[11px] font-medium leading-none"
+                        className="rounded-full px-2 py-[2px] text-[10px] font-medium leading-none"
                         style={{ background: c.badgeBg, color: c.badgeText }}
                       >
                         {opt.badge}
                       </span>
                     )}
-                    <span className="text-[13.5px] font-medium" style={{ color: c.text }}>
+                    <span className="text-[12.5px] font-medium" style={{ color: c.text }}>
                       {opt.label}
                     </span>
                   </span>
                   <span className={`flex items-baseline gap-1.5 tabular-nums ${isAr ? "flex-row-reverse justify-start" : "justify-end"}`}>
-                    <span className="text-[16px] font-semibold" style={{ color: c.text }}>
+                    <span className="text-[15px] font-semibold" style={{ color: c.text }}>
                       ${opt.price}
                     </span>
-                    <span className="text-[11px]" style={{ color: c.muted }}>
+                    <span className="text-[10.5px]" style={{ color: c.muted }}>
                       {opt.unit}
                     </span>
-                    <span className="text-[12px] line-through" style={{ color: c.faint }}>
+                    <span className="text-[11px] line-through" style={{ color: c.faint }}>
                       ${opt.strike}
                     </span>
                   </span>
@@ -332,22 +338,17 @@ export default function MobilePricingScreen({
           })}
         </div>
 
-        {/* Fine print */}
-        <p
-          className="mps-rise mt-3 text-center text-[11px] leading-relaxed"
-          style={{ animationDelay: "260ms", color: c.faint }}
-        >
-          {t.fine}
-        </p>
-
-        {/* CTA */}
+        {/* Fine print + CTA + legal, pinned to the very bottom */}
         <div
-          className="mps-rise mt-auto pt-3"
+          className="mps-rise pt-2.5"
           style={{
-            animationDelay: "320ms",
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)",
+            animationDelay: "300ms",
+            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)",
           }}
         >
+          <p className="mb-2.5 text-center text-[10.5px] leading-relaxed" style={{ color: c.faint }}>
+            {t.fine}
+          </p>
           <button
             type="button"
             onClick={() => onSubscribe("pro")}

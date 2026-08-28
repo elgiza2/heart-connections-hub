@@ -30,6 +30,7 @@ import {
   getPlan,
   type PlanTier,
 } from "@/data/pricingData";
+import { markCheckoutOpened } from "@/lib/pricingOffers";
 
 import { brandText, getZoneBrand } from "@/lib/zoneBrand";
 import { isEgMode } from "@/lib/egMode";
@@ -358,6 +359,7 @@ const PricingPage = () => {
         if (kErr || !kData?.checkout_url) {
           throw new Error(kErr?.message || kData?.error || "Checkout failed");
         }
+        markCheckoutOpened(interval);
         window.location.href = kData.checkout_url;
         return;
       }
@@ -376,7 +378,10 @@ const PricingPage = () => {
         }
         throw error;
       }
-      if (data?.url) window.location.href = data.url;
+      if (data?.url) {
+        markCheckoutOpened(interval);
+        window.location.href = data.url;
+      }
       else throw new Error(data?.error || "Checkout failed");
 
     } catch (e: any) {
