@@ -24,6 +24,11 @@ const BillingSuccessPage = () => {
   const [details, setDetails] = useState<any>(null);
   const [creating, setCreating] = useState(false);
 
+  // A paid checkout cancels the come-back ($5) offer.
+  useEffect(() => {
+    if (status === "success") clearAbandonedCheckout();
+  }, [status]);
+
   useEffect(() => {
     const provider = params.get("provider");
     const kashierOrder = params.get("order");
