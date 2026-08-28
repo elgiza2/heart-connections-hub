@@ -10,12 +10,13 @@
   label.bg-primary,
   [role="button"].bg-primary,
   form button[type="submit"]:not(.bg-transparent):not([data-plain]) {
-    background-color: hsl(var(--sunset-orange)) !important;
-    background-image: var(--sunset-grain), var(--gradient-sunset) !important;
-    background-position: center, center !important;
-    background-repeat: repeat, no-repeat !important;
-    background-size: 180px 100px, 100% 100% !important;
-    background-blend-mode: soft-light, normal !important;
+    background-color: hsl(var(--sunset-orange) / 0.16) !important;
+    background-image: var(--gradient-sunset-liquid) !important;
+    background-repeat: no-repeat !important;
+    background-size: 180% 180%, 170% 170%, 175% 175%, 180% 180%, 200% 100% !important;
+    animation: sunset-liquid-drift 14s ease-in-out infinite !important;
+    -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
+    backdrop-filter: blur(14px) saturate(150%) !important;
     border: 0 !important;
     border-radius: 16px !important;
     color: hsl(var(--sunset-foreground)) !important;
@@ -53,10 +54,16 @@
 
 /* Override the mobile sidebar footer's primary action when it is the Sign-in CTA. */
 [data-mobile-sidebar-footer="true"] button[data-mobile-sidebar-footer-action="primary"][data-sunset] {
-  background-color: hsl(var(--sunset-orange)) !important;
-  background-image: var(--sunset-grain), var(--gradient-sunset) !important;
-  background-size: 180px 100px, 100% 100% !important;
-  background-blend-mode: soft-light, normal !important;
+  background-color: hsl(var(--sunset-orange) / 0.16) !important;
+  background-image: var(--gradient-sunset-liquid) !important;
+  background-repeat: no-repeat !important;
+  background-size: 180% 180%, 170% 170%, 175% 175%, 180% 180%, 200% 100% !important;
+  animation: sunset-liquid-drift 14s ease-in-out infinite !important;
+  -webkit-backdrop-filter: blur(14px) saturate(150%) !important;
+  backdrop-filter: blur(14px) saturate(150%) !important;
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.35),
+    inset 0 0 0 1px hsl(0 0% 100% / 0.16) !important;
   border: 0 !important;
   color: hsl(var(--sunset-foreground)) !important;
   -webkit-text-fill-color: hsl(var(--sunset-foreground)) !important;
@@ -85,5 +92,25 @@
   .pricing-sunset-bg {
     background-color: hsl(var(--background)) !important;
     background-image: none !important;
+  }
+}
+
+/* Weak devices: the liquid layer stops drifting but keeps its colours. */
+html[data-perf="low"] .btn-sunset::before,
+html[data-perf="low"] [data-sunset] {
+  animation: none !important;
+}
+
+/* `.btn-sunset` already paints the liquid in its ::before layer — keep the
+   element itself as pure glass on mobile so the colours don't double up. */
+@media (max-width: 767px) {
+  button.btn-sunset,
+  a.btn-sunset {
+    background-image: none !important;
+    animation: none !important;
+    box-shadow:
+      inset 0 1px 0 hsl(0 0% 100% / 0.35),
+      inset 0 0 0 1px hsl(0 0% 100% / 0.16),
+      0 10px 28px -16px hsl(var(--sunset-coral) / 0.7) !important;
   }
 }
